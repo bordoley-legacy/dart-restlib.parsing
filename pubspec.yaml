@@ -1,0 +1,8 @@
+name: restlib_parsing
+dependencies:
+  restlib_common:
+    git: https://code.google.com/p/dart-restlib.common/
+dev_dependencies:
+  restlib_testing:
+    git: https://code.google.com/p/dart-restlib.testing/
+  unittest: any
