@@ -1,7 +1,5 @@
 part of restlib.parsing;
 
-final Parser<String> EMPTY = stringParser("");
-
 Parser<String> charParser(final String char) =>
     runeParser(new RuneMatcher.isChar(char));
 
@@ -33,8 +31,15 @@ abstract class AbstractParser<T> implements Parser<T> {
           e.isEmpty ? null : e);
   
   Parser map(dynamic f(T value)) =>
-      new _MappedParser(this, f);      
+      new _MappedParser(this, f);    
   
+  Parser<Option<T>> optional() =>
+      new _OptionalParser(this);
+  
+  Parser<T> orElse(final T alternative) =>
+    optional().map((final Option<T> opt) =>
+        opt.orElse(alternative));
+   
   Option<T> parse(final String str) =>
       parseFrom(new StringIterator(str));
   
@@ -83,6 +88,10 @@ abstract class Parser<T> {
   Parser<Iterable<T>> many1();
   
   Parser map(dynamic f(T value));
+  
+  Parser<Option<T>> optional();
+  
+  Parser<T> orElse(final T alternative);
   
   Option<T> parse(String str);
   

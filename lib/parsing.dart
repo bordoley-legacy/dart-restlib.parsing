@@ -15,6 +15,7 @@ part "src/matchers/single_rune_matcher.dart";
 part "src/parsers/list_parser.dart";
 part "src/parsers/many_parser.dart";
 part "src/parsers/mapped_parser.dart";
+part "src/parsers/optional_parser.dart";
 part "src/parsers/or_parser.dart";
 part "src/parsers/repeated_parser.dart";
 part "src/parsers/rune_matcher_parser.dart";
