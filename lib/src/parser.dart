@@ -49,7 +49,10 @@ abstract class AbstractParser<T> implements Parser<T> {
         opt.orElse(alternative));
    
   Option<T> parse(final String str) =>
-      parseFrom(new StringIterator(str));
+      (this + EOF)
+        .map((final Iterable e) => 
+          e.first)
+        .parseFrom(new StringIterator(str));
   
   Option<T> parseFrom(StringIterator itr) {
     final int startIndex = itr.index;
