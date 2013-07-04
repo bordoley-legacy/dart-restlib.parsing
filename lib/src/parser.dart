@@ -1,7 +1,12 @@
 part of restlib.parsing;
 
+const EOF = const _EofParser();
+
 Parser<String> charParser(final String char) =>
     runeParser(new RuneMatcher.isChar(char));
+
+Parser rec(final Parser parser()) =>
+    new _RecurseParser(parser);
 
 Parser<String> runeParser(final RuneMatcher matcher) =>
     new _RuneMatcherParser(matcher);
