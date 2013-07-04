@@ -5,7 +5,7 @@ const EOF = const _EofParser();
 Parser<String> charParser(final String char) =>
     runeParser(new RuneMatcher.isChar(char));
 
-Parser rec(final Parser parser()) =>
+Parser rec(Parser parser()) =>
     new _RecurseParser(parser);
 
 Parser<String> runeParser(final RuneMatcher matcher) =>
