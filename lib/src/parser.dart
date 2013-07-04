@@ -24,7 +24,10 @@ abstract class AbstractParser<T> implements Parser<T> {
       new _ListParser.concat(this, other);
   
   Parser<Either<T,dynamic>> operator|(final Parser other) =>
-      new _OrParser(this, other);      
+      new _OrParser(this, other);   
+  
+  Parser<T> followedBy(final Parser p) =>
+      new _FollowedByParser(this, p);
   
   Option<T> doParse(StringIterator itr);
   
@@ -85,6 +88,8 @@ abstract class Parser<T> {
   Parser<Iterable> operator+(Parser other);
   
   Parser<Either<T,dynamic>> operator|(Parser other);
+  
+  Parser<T> followedBy(Parser p);
   
   /// p.many() is equivalent to p* in EBNF.
   Parser<Iterable<T>> many();
