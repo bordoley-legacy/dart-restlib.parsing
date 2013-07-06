@@ -12,6 +12,7 @@ part "src/matchers/negate_rune_matcher.dart";
 part "src/matchers/none_rune_matcher.dart";
 part "src/matchers/or_rune_matcher.dart";
 part "src/matchers/single_rune_matcher.dart";
+part "src/parsers/char_parser.dart";
 part "src/parsers/eof_parser.dart";
 part "src/parsers/followedby_parser.dart";
 part "src/parsers/list_parser.dart";
