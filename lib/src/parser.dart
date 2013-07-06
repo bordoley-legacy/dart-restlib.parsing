@@ -18,7 +18,7 @@ const Parser<String> OPEN_PARENTHESES = const _CharParser(40, const Option.const
 
 const Parser<String> PERIOD = const _CharParser(46, const Option.constant("."));
 
-const Parser<String> QUOTE = const _CharParser(34, const Option.constant("\""));
+const Parser<String> DQUOTE = const _CharParser(34, const Option.constant("\""));
 
 const Parser<String> SEMICOLON = const _CharParser(59, const Option.constant(";"));
 
