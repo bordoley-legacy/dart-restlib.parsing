@@ -99,12 +99,6 @@ abstract class AbstractParser<T> implements Parser<T> {
   Parser<Iterable<T>> sepBy1(final Parser delim) =>
     sepBy(delim).map((final Iterable<T> e) => 
         e.isEmpty ? null : e);
-  
-  Parser<Iterable<T>> times({final int min:0, final int max:null}) =>
-      isNull(max) ?
-          many().map((final Iterable<T> e) =>
-              e.length > min ? e : null) :
-                new _RepeatedParser(this,min, max);
 }          
  
 abstract class Parser<T> {    
@@ -114,10 +108,10 @@ abstract class Parser<T> {
   
   Parser<T> followedBy(Parser p);
   
-  /// p.many() is equivalent to p* in EBNF.
+  /// p* in EBNF.
   Parser<Iterable<T>> many();
   
-  /// p.many1() is equivalent to p+ in EBNF.
+  /// p+ in EBNF.
   Parser<Iterable<T>> many1();
   
   Parser map(dynamic f(T value));
@@ -133,6 +127,4 @@ abstract class Parser<T> {
   Parser<Iterable<T>> sepBy(Parser delim);
   
   Parser<Iterable<T>> sepBy1(Parser delim);
-  
-  Parser<Iterable> times({min:0, max:null});
 }

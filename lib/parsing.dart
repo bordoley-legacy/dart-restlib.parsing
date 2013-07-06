@@ -21,7 +21,6 @@ part "src/parsers/mapped_parser.dart";
 part "src/parsers/optional_parser.dart";
 part "src/parsers/or_parser.dart";
 part "src/parsers/recurse_parser.dart";
-part "src/parsers/repeated_parser.dart";
 part "src/parsers/rune_matcher_parser.dart";
 part "src/parsers/string_parser.dart";
 part "src/parsers/while_matches_parser.dart";
