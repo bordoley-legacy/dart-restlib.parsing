@@ -16,5 +16,6 @@ class _StringParser<String> extends AbstractParser<String> {
     return retval;
   }
   
-  String toString() => "${retval.value}";
+  String toString() => 
+      "${retval.value}";
 }

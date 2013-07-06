@@ -9,7 +9,9 @@ class _AnyOfRuneMatcher extends RuneMatcher {
     this._runeSet = runes.runes.toSet(),
     super._internal();
   
-  bool matches(final int rune) => _runeSet.contains(rune);
+  bool matches(final int rune) => 
+      _runeSet.contains(rune);
   
-  String toString() => "$_runes";
+  String toString() => 
+      "anyOf($_runes)";
 }

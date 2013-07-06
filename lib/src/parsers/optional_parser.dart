@@ -7,4 +7,7 @@ class _OptionalParser<T> extends AbstractParser<Option<T>> {
   
   Option<Option<T>> doParse(final StringIterator itr) =>
       new Option(delegate.parseFrom(itr));
+  
+  String toString() =>
+      "Optional($delegate)";
 }

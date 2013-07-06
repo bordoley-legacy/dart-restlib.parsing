@@ -10,5 +10,6 @@ class _CharParser extends AbstractParser<String> {
       (itr.moveNext() && itr.current == char) ? 
           charAsString : Option.NONE;
   
-  String toString() => charAsString.value;
+  String toString() => 
+      charAsString.value;
 }

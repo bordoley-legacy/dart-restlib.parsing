@@ -13,5 +13,6 @@ class _MappedParser<T> extends AbstractParser<T> {
   Option<T> doParse(final StringIterator itr) =>
     delegate.parseFrom(itr).map(f);
   
-  String toString() => "Parser.Mapped($delegate)";
+  String toString() => 
+      "Mapped($delegate)";
 }

@@ -1,41 +1,54 @@
 part of restlib.parsing;
 
 abstract class RuneMatcher {
-  static final RuneMatcher ALPHA_NUMERIC_MATCHER = 
-    new RuneMatcher.inRange('a', 'z') | new RuneMatcher.inRange('A', 'Z') | NUMERIC_MATCHER;
+  static final RuneMatcher ALPHA_NUMERIC = 
+    new RuneMatcher.inRange('a', 'z') | new RuneMatcher.inRange('A', 'Z') | DIGIT;
   
   static const RuneMatcher ANY = const _AnyRuneMatcher();
   static const RuneMatcher NONE = const _NoneRuneMatcher();
   
-  static final RuneMatcher NUMERIC_MATCHER = new RuneMatcher.inRange("0", "9");
+  static final RuneMatcher DIGIT = new RuneMatcher.inRange("0", "9");
 
-  factory RuneMatcher.anyOf(String runes) =>
+  factory RuneMatcher.anyOf(final String runes) =>
      (runes.length == 0) ? NONE : new _AnyOfRuneMatcher(runes); 
   
   factory RuneMatcher.inRange(final String start, final String finish) => 
       new _InRangeRuneMatcher(start.runes.single, finish.runes.single);
   
-  factory RuneMatcher.isChar(String rune) =>
+  factory RuneMatcher.isChar(final String rune) =>
       new _SingleRuneMatcher(rune.runes.single);
   
-  factory RuneMatcher.noneOf(String runes) =>
+  factory RuneMatcher.noneOf(final String runes) =>
       new RuneMatcher.anyOf(runes).negate();
   
   const RuneMatcher._internal();
+  
+  Parser<String> get parser =>
+      new _RuneMatcherParser(this);
+  
+  Parser<String> get greedyParser =>
+      new _WhileMatchesParser(this);
   
   /**
    * Returns a {@code RuneMatcher} that matches any code point matched by both {@code this} matcher and {@code other}.
    * @param other a non-null {@code RuneMatcher}
    * @throws NullPointerException if {@code other} is null.
    */
-  RuneMatcher operator &(RuneMatcher other) => new _AndRuneMatcher(this, other);
+  RuneMatcher operator &(final RuneMatcher other) => 
+      new _AndRuneMatcher(this, other);
   
   /**
    * Returns a {@code RuneMatcher} that matches any code point matched by either {@code this} matcher or {@code other}.
    * @param other a non-null {@code RuneMatcher}
    * @throws NullPointerException if {@code other} is null.
    */
-  RuneMatcher operator|(RuneMatcher other) => new _OrRuneMatcher(this, other);
+  RuneMatcher operator|(final RuneMatcher other) => 
+      new _OrRuneMatcher(this, other);
+  
+  Option<String> doParse(final StringIterator itr) =>
+      (itr.moveNext() && this.matches(itr.current)) ? 
+          new Option(new String.fromCharCode(itr.current)) : 
+            Option.NONE;
   
   bool matches(int rune);
   
@@ -44,7 +57,7 @@ abstract class RuneMatcher {
    * @param in a non-null {@code CharSequence}
    * @throws NullPointerException if {@code in} is null.
    */
-  bool matchesAllOf(String val) => 
+  bool matchesAllOf(final String val) => 
       val.runes.every(this.matches);
   
   /**
@@ -52,13 +65,15 @@ abstract class RuneMatcher {
    * @param in a non-null {@code CharSequence}
    * @throws NullPointerException if {@code in} is null.
    */
-  bool matchesNoneOf(String val) => 
-      val.runes.every((int rune) => !this.matches(rune));
+  bool matchesNoneOf(final String val) => 
+      val.runes.every((final int rune) => 
+          !this.matches(rune));
   
   /**
    *  Returns a matcher that matches any code point not matched by this matcher.
    */
-  RuneMatcher negate() => new _NegateRuneMatcher(this);
+  RuneMatcher negate() => 
+      new _NegateRuneMatcher(this);
 }
 
 

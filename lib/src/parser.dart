@@ -6,6 +6,8 @@ const Parser<String> COLON = const _CharParser(58, const Option.constant(":"));
 
 const Parser<String> COMMA = const _CharParser(44, const Option.constant(","));
 
+final Parser<int> DIGIT = RuneMatcher.DIGIT.parser.map(int.parse);
+
 const Parser<String> EOF = const _EofParser();
 
 const Parser<String> EQUALS = const _CharParser(61, const Option.constant("="));
@@ -23,16 +25,10 @@ const Parser<String> DQUOTE = const _CharParser(34, const Option.constant("\""))
 const Parser<String> SEMICOLON = const _CharParser(59, const Option.constant(";"));
 
 Parser<String> charParser(final String char) =>
-    runeParser(new RuneMatcher.isChar(char));
+    new RuneMatcher.isChar(char).parser;
 
 Parser rec(Parser parser()) =>
     new _RecurseParser(parser);
-
-Parser<String> runeParser(final RuneMatcher matcher) =>
-    new _RuneMatcherParser(matcher);
-
-Parser<String> whileMatchesParser(final RuneMatcher matcher) =>
-  new _WhileMatchesParser(matcher);
 
 Parser<String> stringParser(final String string) => 
     new _StringParser(string);

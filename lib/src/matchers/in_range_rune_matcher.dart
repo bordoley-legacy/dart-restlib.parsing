@@ -6,8 +6,9 @@ class _InRangeRuneMatcher extends RuneMatcher {
   
   const _InRangeRuneMatcher(this.start, this.end) : super._internal();
   
-  bool matches(final int rune) => (rune >= start) && (rune <= end);
+  bool matches(final int rune) => 
+      (rune >= start) && (rune <= end);
   
   String toString() =>
-      "${new String.fromCharCode(start)} - ${new String.fromCharCode(end)}";
+      "[${new String.fromCharCode(start)} - ${new String.fromCharCode(end)}]";
 }

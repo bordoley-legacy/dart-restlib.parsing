@@ -78,7 +78,7 @@ parserTests() {
   });  
   
   test ("sepBy", (){
-    Parser<Iterable<String>> parser = whileMatchesParser(RuneMatcher.ALPHA_NUMERIC_MATCHER).sepBy(charParser(","));
+    Parser<Iterable<String>> parser = whileMatchesParser(RuneMatcher.ALPHA_NUMERIC).sepBy(charParser(","));
     expect(parser.parse("a,b,5,sss,yyy").value, equals(["a", "b", "5", "sss", "yyy"]));
     expect(parser.parse("a").value, equals(["a"]));
   });

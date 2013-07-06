@@ -16,5 +16,6 @@ class _ManyParser<T> extends AbstractParser<Iterable<T>> {
     return new Option(retval);
   }
   
-  String toString() => "($delegate)*";
+  String toString() => 
+      "($delegate)*";
 }

@@ -6,7 +6,9 @@ class _SingleRuneMatcher extends RuneMatcher {
   const _SingleRuneMatcher(this._rune) :
     super._internal();
   
-  bool matches(final int rune) => _rune == rune;
+  bool matches(final int rune) => 
+      _rune == rune;
   
-  String toString() => "${new String.fromCharCode(_rune)}";
+  String toString() => 
+      "${new String.fromCharCode(_rune)}";
 }

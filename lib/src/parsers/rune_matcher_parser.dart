@@ -10,5 +10,6 @@ class _RuneMatcherParser extends AbstractParser<String> {
         new Option(new String.fromCharCode(itr.current)) : 
           Option.NONE;
   
-  String toString() => "$matcher";
+  String toString() => 
+      "$matcher";
 }

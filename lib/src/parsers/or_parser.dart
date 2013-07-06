@@ -16,5 +16,6 @@ class _OrParser<T1, T2> extends AbstractParser<Either<T1, T2>> {
           new Either.rightValue(e));
   }
   
-  String toString() => "($fst | $snd)";
+  String toString() => 
+      "($fst | $snd)";
 }

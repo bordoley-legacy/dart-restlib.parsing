@@ -29,5 +29,5 @@ class _ListParser extends AbstractParser<PersistentList> implements Parser<Persi
   }
   
   String toString() =>
-      _parsers.join(" + ");
+      "(" + _parsers.join(" + ") + ")";
 }

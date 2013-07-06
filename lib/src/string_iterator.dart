@@ -26,7 +26,7 @@ class StringIterator implements BidirectionalIterator<int> {
 
   int get index => _index;
   
-  void set index(int index) {
+  void set index(final int index) {
     checkRangeInclusive(index, -1, string.length);
     if ((index > 0) && 
         (index < string.length) && 
@@ -57,7 +57,8 @@ class StringIterator implements BidirectionalIterator<int> {
     }
   }  
   
-  String toString() => "StringIterator($string)";
+  String toString() => 
+      "StringIterator($string, $index)";
   
   void _moveIndexToNextCodePointIndex() {
     if ((index > -1) &&
@@ -91,12 +92,13 @@ class StringIterator implements BidirectionalIterator<int> {
 }
 
 // Is then code (a 16-bit unsigned integer) a UTF-16 lead surrogate.
-bool _isLeadSurrogate(int code) => (code & 0xFC00) == 0xD800;
+bool _isLeadSurrogate(final int code) => 
+    (code & 0xFC00) == 0xD800;
 
 // Is then code (a 16-bit unsigned integer) a UTF-16 trail surrogate.
-bool _isTrailSurrogate(int code) => (code & 0xFC00) == 0xDC00;
+bool _isTrailSurrogate(final int code) => 
+    (code & 0xFC00) == 0xDC00;
 
 // Combine a lead and a trail surrogate value into a single code point.
-int _combineSurrogatePair(int start, int end) {
-  return 0x10000 + ((start & 0x3FF) << 10) + (end & 0x3FF);
-}
+int _combineSurrogatePair(final int start, final int end) =>
+  0x10000 + ((start & 0x3FF) << 10) + (end & 0x3FF);

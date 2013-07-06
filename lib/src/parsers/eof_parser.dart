@@ -8,5 +8,6 @@ class _EofParser extends AbstractParser<String> {
   Option<String> doParse(final StringIterator itr) =>
       itr.moveNext() ? Option.NONE : _EofParser.EMPTY_STRING_OPTION;
   
-  String toString() => "EOF";
+  String toString() => 
+      "EOF";
 }

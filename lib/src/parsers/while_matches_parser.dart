@@ -17,5 +17,6 @@ class _WhileMatchesParser<String> extends AbstractParser<String> {
         new Option(itr.string.substring(startIndex + 1, endIndex)) : Option.NONE;
   }
   
-  String toString() => "*$matcher";
+  String toString() => 
+      "($matcher)*";
 }
