@@ -13,8 +13,7 @@ class _ManyRuneParser extends AbstractParser<IterableString> {
     final int endIndex = itr.index;
     itr.movePrevious();
     
-    return (endIndex > (startIndex + 1)) ? 
-        new Option(new IterableString(itr.string.substring(startIndex + 1, endIndex))) : Option.NONE;
+    return new Option(new IterableString(itr.string.substring(startIndex + 1, endIndex)));
   }
   
   String toString() => 

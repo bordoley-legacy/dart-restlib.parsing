@@ -32,7 +32,7 @@ abstract class RuneMatcher extends AbstractParser<int> {
       new _OrRuneMatcher(this, other);
   
   Option<int> doParse(final StringIterator itr) =>
-      (itr.moveNext() && this.matches(itr.current)) ? 
+      (itr.moveNext() && matches(itr.current)) ? 
           new Option(itr.current) : 
             Option.NONE;
           
