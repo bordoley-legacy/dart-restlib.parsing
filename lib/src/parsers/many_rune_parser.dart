@@ -1,11 +1,11 @@
 part of restlib.parsing;
 
-class _WhileMatchesParser<String> extends AbstractParser<String> {
+class _ManyRuneParser extends AbstractParser<IterableString> {
   final RuneMatcher matcher;
   
-  const _WhileMatchesParser(this.matcher);
+  const _ManyRuneParser(this.matcher);
   
-  Option<String> doParse(final StringIterator itr) {
+  Option<IterableString> doParse(final StringIterator itr) {
     final int startIndex = itr.index;
     
     while(itr.moveNext() && matcher.matches(itr.current));
@@ -14,7 +14,7 @@ class _WhileMatchesParser<String> extends AbstractParser<String> {
     itr.movePrevious();
     
     return (endIndex > (startIndex + 1)) ? 
-        new Option(itr.string.substring(startIndex + 1, endIndex)) : Option.NONE;
+        new Option(new IterableString(itr.string.substring(startIndex + 1, endIndex))) : Option.NONE;
   }
   
   String toString() => 

@@ -9,6 +9,9 @@ class _AnyRuneMatcher extends RuneMatcher {
   RuneMatcher operator|(final RuneMatcher other) => 
       this;
   
+  Option<int> doParse(final StringIterator itr) =>
+      (itr.moveNext()) ? new Option(itr.current) : Option.NONE;
+  
   bool matches(final int rune) => 
       true;
   
@@ -19,7 +22,7 @@ class _AnyRuneMatcher extends RuneMatcher {
       false;
   
   RuneMatcher negate() => 
-      RuneMatcher.NONE;
+      NONE;
   
   String toString() => 
       "*";

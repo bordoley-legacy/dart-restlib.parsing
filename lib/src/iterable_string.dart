@@ -1,5 +1,20 @@
 part of restlib.parsing;
 
+class IterableString extends IterableBase<int> {
+  final String _string;
+  
+  const IterableString(this._string);
+  
+  bool get isEmpty =>
+      _string.isEmpty;
+  
+  StringIterator get iterator =>
+      new StringIterator(_string);
+  
+  String toString() =>
+      _string;
+}
+
 class StringIterator implements BidirectionalIterator<int> {
   int _current = null;  
   int _index = -1;

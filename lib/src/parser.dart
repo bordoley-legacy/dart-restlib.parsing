@@ -1,45 +1,12 @@
 part of restlib.parsing;
 
-const Parser<String> CLOSE_PARENTHESES = const _CharParser(41, const Option.constant(")"));
-
-const Parser<String> COLON = const _CharParser(58, const Option.constant(":"));
-
-const Parser<String> COMMA = const _CharParser(44, const Option.constant(","));
-
-final Parser<int> DIGIT = RuneMatcher.DIGIT.parser.map(int.parse);
-
-const Parser<String> EOF = const _EofParser();
-
-const Parser<String> EQUALS = const _CharParser(61, const Option.constant("="));
-
-const Parser<String> FORWARD_SLASH = const _CharParser(47, const Option.constant("/"));
-
-const Parser<String> GLOB = const _CharParser(42, const Option.constant("*"));
-
-const Parser<String> OPEN_PARENTHESES = const _CharParser(40, const Option.constant("("));
-
-const Parser<String> PERIOD = const _CharParser(46, const Option.constant("."));
-
-const Parser<String> DQUOTE = const _CharParser(34, const Option.constant("\""));
-
-const Parser<String> SEMICOLON = const _CharParser(59, const Option.constant(";"));
-
-Parser<String> charParser(final String char) =>
-    new RuneMatcher.isChar(char).parser;
-
-Parser rec(Parser parser()) =>
-    new _RecurseParser(parser);
-
-Parser<String> stringParser(final String string) => 
-    new _StringParser(string);
-
 abstract class AbstractParser<T> implements Parser<T> {
   const AbstractParser();
   
   Parser<Iterable> operator+(final Parser other) => 
       new _ListParser.concat(this, other);
   
-  Parser<Either<T,dynamic>> operator|(final Parser other) =>
+  Parser<Either<T,dynamic>> operator^(final Parser other) =>
       new _OrParser(this, other);   
   
   Parser<T> followedBy(final Parser p) =>
@@ -100,7 +67,7 @@ abstract class AbstractParser<T> implements Parser<T> {
 abstract class Parser<T> {    
   Parser<Iterable> operator+(Parser other);
   
-  Parser<Either<T,dynamic>> operator|(Parser other);
+  Parser<Either<T,dynamic>> operator^(Parser other);
   
   Parser<T> followedBy(Parser p);
   

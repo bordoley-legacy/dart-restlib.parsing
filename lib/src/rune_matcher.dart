@@ -1,14 +1,6 @@
 part of restlib.parsing;
 
-abstract class RuneMatcher {
-  static final RuneMatcher ALPHA_NUMERIC = 
-    new RuneMatcher.inRange('a', 'z') | new RuneMatcher.inRange('A', 'Z') | DIGIT;
-  
-  static const RuneMatcher ANY = const _AnyRuneMatcher();
-  static const RuneMatcher NONE = const _NoneRuneMatcher();
-  
-  static final RuneMatcher DIGIT = new RuneMatcher.inRange("0", "9");
-
+abstract class RuneMatcher extends AbstractParser<int> {
   factory RuneMatcher.anyOf(final String runes) =>
      (runes.length == 0) ? NONE : new _AnyOfRuneMatcher(runes); 
   
@@ -22,12 +14,6 @@ abstract class RuneMatcher {
       new RuneMatcher.anyOf(runes).negate();
   
   const RuneMatcher._internal();
-  
-  Parser<String> get parser =>
-      new _RuneMatcherParser(this);
-  
-  Parser<String> get greedyParser =>
-      new _WhileMatchesParser(this);
   
   /**
    * Returns a {@code RuneMatcher} that matches any code point matched by both {@code this} matcher and {@code other}.
@@ -45,10 +31,16 @@ abstract class RuneMatcher {
   RuneMatcher operator|(final RuneMatcher other) => 
       new _OrRuneMatcher(this, other);
   
-  Option<String> doParse(final StringIterator itr) =>
+  Option<int> doParse(final StringIterator itr) =>
       (itr.moveNext() && this.matches(itr.current)) ? 
-          new Option(new String.fromCharCode(itr.current)) : 
+          new Option(itr.current) : 
             Option.NONE;
+          
+  Parser<IterableString> many() =>
+      new _ManyRuneParser(this);    
+  
+  Parser<IterableString> many1() =>
+      super.many1(); 
   
   bool matches(int rune);
   

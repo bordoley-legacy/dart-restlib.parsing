@@ -6,7 +6,7 @@ class _EofParser extends AbstractParser<String> {
   const _EofParser();
 
   Option<String> doParse(final StringIterator itr) =>
-      itr.moveNext() ? Option.NONE : _EofParser.EMPTY_STRING_OPTION;
+      itr.moveNext() ? Option.NONE : EMPTY_STRING_OPTION;
   
   String toString() => 
       "EOF";
