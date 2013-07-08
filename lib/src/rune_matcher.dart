@@ -1,18 +1,6 @@
 part of restlib.parsing;
 
-abstract class RuneMatcher extends AbstractParser<int> {
-  factory RuneMatcher.anyOf(final String runes) =>
-     (runes.length == 0) ? NONE : new _AnyOfRuneMatcher(runes); 
-  
-  factory RuneMatcher.inRange(final String start, final String finish) => 
-      new _InRangeRuneMatcher(start.runes.single, finish.runes.single);
-  
-  factory RuneMatcher.isChar(final String rune) =>
-      new _SingleRuneMatcher(rune.runes.single);
-  
-  factory RuneMatcher.noneOf(final String runes) =>
-      new RuneMatcher.anyOf(runes).negate();
-  
+abstract class RuneMatcher extends AbstractParser<int> {  
   const RuneMatcher._internal();
   
   /**

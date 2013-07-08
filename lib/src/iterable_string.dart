@@ -1,9 +1,14 @@
 part of restlib.parsing;
 
 class IterableString extends IterableBase<int> {
+  static const IterableString EMPTY = const IterableString._internal("");
+  
+  factory IterableString(final String string) =>
+      string.isEmpty ? EMPTY : new IterableString._internal(string);
+  
   final String _string;
   
-  const IterableString(this._string);
+  const IterableString._internal(this._string);
   
   bool get isEmpty =>
       _string.isEmpty;

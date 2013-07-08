@@ -28,7 +28,7 @@ part "src/parser.dart";
 part "src/rune_matcher.dart";
 part "src/iterable_string.dart";
 
-final RuneMatcher ALPHA_NUMERIC = new RuneMatcher.inRange('a', 'z') | new RuneMatcher.inRange('A', 'Z') | NUMERIC;
+final RuneMatcher ALPHA_NUMERIC = inRange('a', 'z') | inRange('A', 'Z') | NUMERIC;
 
 const RuneMatcher ANY = const _AnyRuneMatcher();
 
@@ -51,7 +51,7 @@ const RuneMatcher GLOB = const _SingleRuneMatcher(42);
 
 const RuneMatcher NONE = const _NoneRuneMatcher();
 
-final RuneMatcher NUMERIC = new RuneMatcher.inRange("0", "9");
+final RuneMatcher NUMERIC = inRange("0", "9");
 
 const RuneMatcher OPEN_PARENTHESES = const _SingleRuneMatcher(40);
 
@@ -64,5 +64,17 @@ const RuneMatcher SEMICOLON = const _SingleRuneMatcher(59);
 Parser rec(Parser parser()) =>
     new _RecurseParser(parser);
 
-Parser<String> stringParser(final String string) => 
+Parser<String> string(final String string) => 
     new _StringParser(string);
+
+RuneMatcher anyOf(final String runes) =>
+    (runes.length == 0) ? NONE : new _AnyOfRuneMatcher(runes); 
+
+RuneMatcher inRange(final String start, final String finish) => 
+    new _InRangeRuneMatcher(start.runes.single, finish.runes.single);
+
+RuneMatcher isChar(final String rune) =>
+    new _SingleRuneMatcher(rune.runes.single);
+
+RuneMatcher noneOf(final String runes) =>
+    anyOf(runes).negate();
