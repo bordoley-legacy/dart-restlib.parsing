@@ -6,14 +6,6 @@ import "package:restlib_common/collections.dart";
 import "package:restlib_common/objects.dart";
 import "package:restlib_common/preconditions.dart";
 
-part "src/matchers/and_rune_matcher.dart";
-part "src/matchers/any_rune_matcher.dart";
-part "src/matchers/any_of_rune_matcher.dart";
-part "src/matchers/in_range_rune_matcher.dart";
-part "src/matchers/negate_rune_matcher.dart";
-part "src/matchers/none_rune_matcher.dart";
-part "src/matchers/or_rune_matcher.dart";
-part "src/matchers/single_rune_matcher.dart";
 part "src/parsers/eof_parser.dart";
 part "src/parsers/followedby_parser.dart";
 part "src/parsers/list_parser.dart";
@@ -23,10 +15,18 @@ part "src/parsers/mapped_parser.dart";
 part "src/parsers/optional_parser.dart";
 part "src/parsers/or_parser.dart";
 part "src/parsers/recurse_parser.dart";
-part "src/parsers/string_parser.dart";
+part "src/rune_matchers/and_rune_matcher.dart";
+part "src/rune_matchers/any_rune_matcher.dart";
+part "src/rune_matchers/any_of_rune_matcher.dart";
+part "src/rune_matchers/in_range_rune_matcher.dart";
+part "src/rune_matchers/negate_rune_matcher.dart";
+part "src/rune_matchers/none_rune_matcher.dart";
+part "src/rune_matchers/or_rune_matcher.dart";
+part "src/rune_matchers/single_rune_matcher.dart";
+part "src/iterable_string.dart";
 part "src/parser.dart";
 part "src/rune_matcher.dart";
-part "src/iterable_string.dart";
+part "src/string_parser.dart";
 
 final RuneMatcher ALPHA_NUMERIC = inRange('a', 'z') | inRange('A', 'Z') | NUMERIC;
 
@@ -64,8 +64,8 @@ const RuneMatcher SEMICOLON = const _SingleRuneMatcher(59);
 Parser rec(Parser parser()) =>
     new _RecurseParser(parser);
 
-Parser<String> string(final String string) => 
-    new _StringParser(string);
+StringParser string(final String string) => 
+    new _SingleStringParser(string);
 
 RuneMatcher anyOf(final String runes) =>
     (runes.length == 0) ? NONE : new _AnyOfRuneMatcher(runes); 

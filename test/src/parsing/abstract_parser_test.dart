@@ -2,8 +2,8 @@ part of restlib_parsing.parsing_test;
 
 parserTests() {
   test("characterParser()", () {
-    Parser<String> characterParser = charParser("v");
-    Parser<String> surrogatePairParser = charParser("\u{1D11E}");
+    Parser<int> characterParser = isChar("v");
+    Parser<int> surrogatePairParser = isChar("\u{1D11E}");
     
     expect(characterParser.parse(""), isEmpty);
     
