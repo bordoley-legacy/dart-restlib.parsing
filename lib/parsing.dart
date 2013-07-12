@@ -61,6 +61,8 @@ const RuneMatcher DQUOTE = const _SingleRuneMatcher(34);
 
 const RuneMatcher SEMICOLON = const _SingleRuneMatcher(59);
 
+const RuneMatcher SP = const _SingleRuneMatcher(32);
+
 Parser rec(Parser parser()) =>
     new _RecurseParser(parser);
 
