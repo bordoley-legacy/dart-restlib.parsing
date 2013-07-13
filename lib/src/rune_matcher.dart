@@ -27,9 +27,6 @@ abstract class RuneMatcher extends AbstractParser<int> {
   Parser<IterableString> many() =>
       new _ManyRuneParser(this);    
   
-  Parser<IterableString> many1() =>
-      super.many1(); 
-  
   bool matches(int rune);
   
   /**

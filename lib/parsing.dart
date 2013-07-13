@@ -41,6 +41,11 @@ const RuneMatcher COMMA = const _SingleRuneMatcher(44);
 final Parser<int> DIGIT = NUMERIC.map((final int rune) => 
     rune - 48);
 
+final Parser<int> INTEGER = 
+  NUMERIC.many1().map((final IterableString digits) => 
+      digits.fold(0, (final int accumulator, final int rune) => 
+          (accumulator * 10) + (rune - 48)));
+
 const Parser<String> EOF = const _EofParser();
 
 const RuneMatcher EQUALS = const _SingleRuneMatcher(61);
@@ -63,12 +68,6 @@ const RuneMatcher SEMICOLON = const _SingleRuneMatcher(59);
 
 const RuneMatcher SP = const _SingleRuneMatcher(32);
 
-Parser rec(Parser parser()) =>
-    new _RecurseParser(parser);
-
-StringParser string(final String string) => 
-    new _SingleStringParser(string);
-
 RuneMatcher anyOf(final String runes) =>
     (runes.length == 0) ? NONE : new _AnyOfRuneMatcher(runes); 
 
@@ -80,3 +79,9 @@ RuneMatcher isChar(final String rune) =>
 
 RuneMatcher noneOf(final String runes) =>
     anyOf(runes).negate();
+
+Parser rec(Parser parser()) =>
+    new _RecurseParser(parser);
+
+StringParser string(final String string) => 
+    new _SingleStringParser(string);
