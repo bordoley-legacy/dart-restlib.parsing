@@ -50,6 +50,10 @@ const Parser<String> EOF = const _EofParser();
 
 const RuneMatcher EQUALS = const _SingleRuneMatcher(61);
 
+const RuneMatcher DASH = const _SingleRuneMatcher(45);
+
+const RuneMatcher DQUOTE = const _SingleRuneMatcher(34);
+
 const RuneMatcher FORWARD_SLASH = const _SingleRuneMatcher(47);
 
 const RuneMatcher GLOB = const _SingleRuneMatcher(42);
@@ -61,8 +65,6 @@ final RuneMatcher NUMERIC = inRange("0", "9");
 const RuneMatcher OPEN_PARENTHESES = const _SingleRuneMatcher(40);
 
 const RuneMatcher PERIOD = const _SingleRuneMatcher(46);
-
-const RuneMatcher DQUOTE = const _SingleRuneMatcher(34);
 
 const RuneMatcher SEMICOLON = const _SingleRuneMatcher(59);
 
