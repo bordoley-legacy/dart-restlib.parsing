@@ -3,7 +3,6 @@ library restlib.parsing;
 import "dart:collection";
 
 import "package:restlib_common/collections.dart";
-import "package:restlib_common/objects.dart";
 import "package:restlib_common/preconditions.dart";
 
 part "src/parsers/eof_parser.dart";

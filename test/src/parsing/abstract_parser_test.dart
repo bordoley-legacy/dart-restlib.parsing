@@ -35,9 +35,9 @@ parserTests() {
   });
   
   test("compositeParser()", () {
-    Parser<String> a = charParser("a");
-    Parser<String> b = charParser("b");
-    Parser<String> c = charParser("c");
+    Parser<int> a = isChar("a");
+    Parser<int> b = isChar("b");
+    Parser<int> c = isChar("c");
     
     Parser<String> composite = (a + b + c).map((e) => e.join());
     
@@ -53,9 +53,9 @@ parserTests() {
   });
   
   test("firstOrSecondParser()", () {
-    Parser<String> a = charParser("a");
-    Parser<String> b = charParser("b");
-    Parser<Either<String,String>> aOrB = a ^ b;
+    Parser<int> a = isChar("a");
+    Parser<int> b = isChar("b");
+    Parser<Either<int,int>> aOrB = a ^ b;
     
     expect(aOrB.parse("abc").value.left.value, equals("a"));
     expect(aOrB.parse("bca").value.right.value, equals("b"));
@@ -63,23 +63,8 @@ parserTests() {
   });
   
   test("predicateParser", (){
-    RuneMatcher matcher = new RuneMatcher.inRange("a", "z");
-    Parser parser = matcher.parser;
-    expect(parser.parse("c").value, equals("c"));
-    expect(parser.parse("ABC"), isEmpty);
-  });
-  
-  test("whileParser", (){
-    RuneMatcher matcher = new RuneMatcher.inRange("a", "z");
-    Parser testWhileParser = matcher.greedyParser;
-    expect(testWhileParser.parse("abcz").value, equals("abcz"));
-    expect(testWhileParser.parse("abczZZZZZZ").value, equals("abcz"));
-    expect(testWhileParser.parse("ZZZZZZabcz"), isEmpty);
-  });  
-  
-  test ("sepBy", (){
-    Parser<Iterable<String>> parser = RuneMatcher.ALPHA_NUMERIC.greedyParser.sepBy(charParser(","));
-    expect(parser.parse("a,b,5,sss,yyy").value, equals(["a", "b", "5", "sss", "yyy"]));
-    expect(parser.parse("a").value, equals(["a"]));
+    RuneMatcher matcher = inRange("a", "z");
+    expect(matcher.parse("c").value, equals("c"));
+    expect(matcher.parse("ABC"), isEmpty);
   });
 }
