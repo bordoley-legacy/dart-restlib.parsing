@@ -8,7 +8,7 @@ class _ListParser extends AbstractParser<PersistentList> implements Parser<Persi
         (fst is _ListParser) ? fst._parsers : PersistentList.EMPTY.add(fst);
     parsers =
         (snd is _ListParser) ? parsers.addAll(snd._parsers) : parsers.add(snd);
-   return new _ListParser(parsers);     
+    return new _ListParser(parsers);     
   }    
   
   const _ListParser(this._parsers);
