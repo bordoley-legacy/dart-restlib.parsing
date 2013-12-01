@@ -1,11 +1,11 @@
 part of restlib.parsing;
 
-class _ListParser extends AbstractParser<PersistentList> implements Parser<PersistentList> {
-  final PersistentList<Parser> _parsers;
+class _ListParser extends AbstractParser<PersistentSequence> implements Parser<PersistentSequence> {
+  final PersistentSequence<Parser> _parsers;
   
   factory _ListParser.concat(final Parser fst, final Parser snd) {    
-    PersistentList<Parser> parsers =
-        (fst is _ListParser) ? fst._parsers : PersistentList.EMPTY.add(fst);
+    PersistentSequence<Parser> parsers =
+        (fst is _ListParser) ? fst._parsers : PersistentSequence.EMPTY.add(fst);
     parsers =
         (snd is _ListParser) ? parsers.addAll(snd._parsers) : parsers.add(snd);
     return new _ListParser(parsers);     
@@ -13,8 +13,8 @@ class _ListParser extends AbstractParser<PersistentList> implements Parser<Persi
   
   const _ListParser(this._parsers);
   
-  Option<PersistentList> doParse(final StringIterator itr) {
-    PersistentList tokens = PersistentList.EMPTY;
+  Option<PersistentSequence> doParse(final StringIterator itr) {
+    PersistentSequence tokens = PersistentSequence.EMPTY;
     
     for(final Parser p in _parsers) {
       final Option parseResult = p.parseFrom(itr);
