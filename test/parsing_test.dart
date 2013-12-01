@@ -9,8 +9,9 @@ part "src/rune_matcher_test.dart";
 part 'src/string_iterator_test.dart';
 
 parsingTestGroups() {
-  group("class StringIterator", stringIteratorTests);
-  group("function Parser", parserTests);
+  group("package:parsing", () {
+
+  });
 }
 
 main() {
