@@ -11,7 +11,7 @@ abstract class StringParser extends AbstractParser<String> {
 
 class _OrStringParser extends StringParser { 
   factory _OrStringParser(final StringParser fst, final StringParser snd) {
-    PersistentSequence<StringParser> matchers = PersistentSequence.EMPTY;
+    ImmutableSequence<StringParser> matchers = Persistent.EMPTY_SEQUENCE;
     matchers = (fst is _OrStringParser) ? 
         fst.matchers : matchers.add(fst);
     matchers = (snd is _OrStringParser) ? 
@@ -20,7 +20,7 @@ class _OrStringParser extends StringParser {
     return new _OrStringParser._internal(matchers);     
   }
   
-  final PersistentSequence<StringParser> matchers;
+  final ImmutableSequence<StringParser> matchers;
   
   const _OrStringParser._internal(this.matchers) : super._internal();
   

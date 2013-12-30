@@ -6,7 +6,7 @@ class _ManyParser<T> extends AbstractParser<Iterable<T>> {
   const _ManyParser(this.delegate);
   
   Option<Iterable<T>> doParse(final StringIterator itr) {
-    PersistentSequence<T> retval = PersistentSequence.EMPTY;
+    ImmutableSequence<T> retval = Persistent.EMPTY_SEQUENCE;
     
     Option<T> t = Option.NONE;
     while ((t = delegate.parseFrom(itr)).isNotEmpty) {
