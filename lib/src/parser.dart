@@ -7,7 +7,10 @@ abstract class AbstractParser<T> implements Parser<T> {
       new _ListParser.concat(this, other);
   
   Parser<Either<T,dynamic>> operator^(final Parser other) =>
-      new _OrParser(this, other);   
+      new _OrParser(this, other); 
+  
+  Parser flatMap(Option f(T value)) =>
+      new _FlatMappedParser(this, f);
   
   Parser<T> followedBy(final Parser p) =>
       new _FollowedByParser(this, p);
@@ -22,7 +25,7 @@ abstract class AbstractParser<T> implements Parser<T> {
           e.isEmpty ? null : e);
   
   Parser map(dynamic f(T value)) =>
-      new _MappedParser(this, f);    
+      new _MappedParser(this, f);     
   
   Parser<Option<T>> optional() =>
       new _OptionalParser(this);
@@ -68,6 +71,8 @@ abstract class Parser<T> {
   Parser<Iterable> operator+(Parser other);
   
   Parser<Either<T,dynamic>> operator^(Parser other);
+  
+  Parser flatMap(Option f(T value));
   
   Parser<T> followedBy(Parser p);
   
