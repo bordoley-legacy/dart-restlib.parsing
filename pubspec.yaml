@@ -1,5 +1,6 @@
 name: restlib_parsing
-dependencies:
+description: Parsec style parsers for dart.
+dependencies: 
   restlib_common:
     git: https://code.google.com/p/dart-restlib.common/
 dev_dependencies:
