@@ -5,6 +5,7 @@ import "dart:collection";
 import "package:restlib_common/collections.dart";
 import "package:restlib_common/preconditions.dart";
 
+part "src/parsers/either_parser.dart";
 part "src/parsers/eof_parser.dart";
 part "src/parsers/followedby_parser.dart";
 part "src/parsers/list_parser.dart";
@@ -84,5 +85,5 @@ RuneMatcher noneOf(final String runes) =>
 Parser rec(Parser parser()) =>
     new _RecurseParser(parser);
 
-StringParser string(final String string) => 
-    new _SingleStringParser(string);
+Parser<String> string(final String string) => 
+    new _StringParser(string);
