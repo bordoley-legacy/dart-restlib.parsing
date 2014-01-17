@@ -3,6 +3,7 @@ library restlib.parsing;
 import "dart:collection";
 
 import "package:restlib_common/collections.dart";
+import "package:restlib_common/collections.immutable.dart";
 import "package:restlib_common/preconditions.dart";
 
 part "src/parsers/either_parser.dart";
