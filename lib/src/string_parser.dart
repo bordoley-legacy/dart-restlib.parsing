@@ -9,7 +9,7 @@ class _StringParser extends AbstractParser<String> {
     final int startIndx = itr.index + 1;
     final int endIndx = startIndx + str.length;
     
-    if (endIndx >= itr.string.length) {
+    if (endIndx > itr.string.length) {
       return Option.NONE;
     } 
     
