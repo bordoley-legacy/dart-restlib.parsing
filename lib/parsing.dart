@@ -29,7 +29,9 @@ part "src/parser.dart";
 part "src/rune_matcher.dart";
 part "src/string_parser.dart";
 
-final RuneMatcher ALPHA_NUMERIC = inRange('a', 'z') | inRange('A', 'Z') | NUMERIC;
+final RuneMatcher ALPHA = inRange('a', 'z') | inRange('A', 'Z');
+
+final RuneMatcher ALPHA_NUMERIC = ALPHA | NUMERIC;
 
 const RuneMatcher ANY = const _AnyRuneMatcher();
 
