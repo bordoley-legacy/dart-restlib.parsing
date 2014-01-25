@@ -61,6 +61,8 @@ const RuneMatcher FORWARD_SLASH = const _SingleRuneMatcher(47);
 
 const RuneMatcher GLOB = const _SingleRuneMatcher(42);
 
+final RuneMatcher HEXDIG = NUMERIC | anyOf("ABCDEF");
+
 const RuneMatcher NONE = const _NoneRuneMatcher();
 
 final RuneMatcher NUMERIC = inRange("0", "9");
