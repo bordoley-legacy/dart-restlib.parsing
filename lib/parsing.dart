@@ -29,17 +29,29 @@ part "src/parser.dart";
 part "src/rune_matcher.dart";
 part "src/string_parser.dart";
 
+// See http://tools.ietf.org/html/rfc5234#appendix-B.1
+
 final RuneMatcher ALPHA = inRange('a', 'z') | inRange('A', 'Z');
 
 final RuneMatcher ALPHA_NUMERIC = ALPHA | NUMERIC;
 
 const RuneMatcher ANY = const _AnyRuneMatcher();
 
+final RuneMatcher BIT = anyOf("01");
+
+final RuneMatcher CHAR = inRange("\u0001", "\u007F");
+
 const RuneMatcher CLOSE_PARENTHESES = const _SingleRuneMatcher(41);
 
 const RuneMatcher COLON = const _SingleRuneMatcher(58);
 
 const RuneMatcher COMMA = const _SingleRuneMatcher(44);
+
+const RuneMatcher CR = const _SingleRuneMatcher(13);
+
+final Parser<IterableString> CRLF = CR + LF;
+
+final RuneMatcher CTL = inRange("\u0000", "\u001F") | isChar("\u007F");
 
 final Parser<int> DIGIT = NUMERIC.map((final int rune) => 
     rune - 48);
@@ -63,9 +75,17 @@ const RuneMatcher GLOB = const _SingleRuneMatcher(42);
 
 final RuneMatcher HEXDIG = NUMERIC | anyOf("ABCDEF");
 
+const RuneMatcher HTAB = const _SingleRuneMatcher(9);
+
+const RuneMatcher LF = const _SingleRuneMatcher(10);
+
+// FIXME: LWSP =  *(WSP / CRLF WSP)
+
 const RuneMatcher NONE = const _NoneRuneMatcher();
 
 final RuneMatcher NUMERIC = inRange("0", "9");
+
+final RuneMatcher OCTET = inRange("\u0000", "\u00FF");
 
 const RuneMatcher OPEN_PARENTHESES = const _SingleRuneMatcher(40);
 
@@ -74,6 +94,10 @@ const RuneMatcher PERIOD = const _SingleRuneMatcher(46);
 const RuneMatcher SEMICOLON = const _SingleRuneMatcher(59);
 
 const RuneMatcher SP = const _SingleRuneMatcher(32);
+
+final RuneMatcher VCHAR = inRange("\u0021", "\u007E");
+
+final RuneMatcher WSP = anyOf(" \t");
 
 RuneMatcher anyOf(final String runes) =>
     (runes.length == 0) ? NONE : new _AnyOfRuneMatcher(runes); 
