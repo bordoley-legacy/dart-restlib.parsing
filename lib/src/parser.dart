@@ -12,8 +12,6 @@ abstract class AbstractParser<T> implements Parser<T> {
   Parser<T> operator|(final Parser<T> other) =>
       new _OrParser(this, other);
   
-//  Parser<T> operator|(Parser<T> other);
-  
   Parser flatMap(Option f(T value)) =>
       new _FlatMappedParser(this, f);
   
