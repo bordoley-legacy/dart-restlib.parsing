@@ -56,7 +56,7 @@ abstract class AbstractParser<T> implements Parser<T> {
     final Parser<Iterable<T>> additional =
         (delim + this)
           .map((final Iterable e) =>
-              e.elementAt(1))
+              e.last) // Make sure its the last elements since delim can be a list parser
           .many();
           
     return (this + additional)
