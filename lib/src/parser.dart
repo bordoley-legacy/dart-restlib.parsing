@@ -53,13 +53,14 @@ abstract class AbstractParser<T> implements Parser<T> {
   }
   
   Parser<Iterable<T>> sepBy(final Parser delim) {
+    final Parser<T> safeParser = this.map((final T value) => value);
     final Parser<Iterable<T>> additional =
-        (delim + this)
+        (delim + safeParser)
           .map((final Iterable e) =>
               e.last) // Make sure its the last elements since delim can be a list parser
           .many();
           
-    return (this + additional)
+    return (safeParser + additional)
               .map((final Iterable e) =>
                   // FIXME: PersistentList should support push since it implements Stack
                   [e.elementAt(0)]..addAll(e.elementAt(1)));

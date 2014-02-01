@@ -35,6 +35,8 @@ final RuneMatcher ALPHA = inRange('a', 'z') | inRange('A', 'Z');
 
 final RuneMatcher ALPHA_NUMERIC = ALPHA | NUMERIC;
 
+final RuneMatcher AMPERSAND = const _SingleRuneMatcher(38);
+
 const RuneMatcher ANY = const _AnyRuneMatcher();
 
 final RuneMatcher BIT = anyOf("01");
