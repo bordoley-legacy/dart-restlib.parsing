@@ -43,7 +43,7 @@ abstract class AbstractParser<T> implements Parser<T> {
           e.first)
         .parseFrom(new StringIterator(str));
   
-  Option<T> parseFrom(StringIterator itr) {
+  Option<T> parseFrom(final StringIterator itr) {
     final int startIndex = itr.index;
     final Option<T> token = doParse(itr);
     if (token.isEmpty) {
@@ -51,6 +51,10 @@ abstract class AbstractParser<T> implements Parser<T> {
     }
     return token; 
   }
+  
+  T parseValue(final String str) =>
+      computeIfEmpty(parse(str), () =>
+          throw new ArgumentError("Failed to parse $str")).first;
   
   Parser<Iterable<T>> sepBy(final Parser delim) {
     final Parser<T> safeParser = this.map((final T value) => value);
@@ -95,6 +99,8 @@ abstract class Parser<T> {
   Parser<T> orElse(final T alternative);
   
   Option<T> parse(String str);
+  
+  T parseValue(String str);
   
   Option<T> parseFrom(StringIterator itr);
   
