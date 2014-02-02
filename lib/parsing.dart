@@ -39,6 +39,8 @@ final RuneMatcher AMPERSAND = const _SingleRuneMatcher(38);
 
 const RuneMatcher ANY = const _AnyRuneMatcher();
 
+const RuneMatcher ASTERISK = const _SingleRuneMatcher(42);
+
 final RuneMatcher BIT = anyOf("01");
 
 final RuneMatcher CHAR = inRange("\u0001", "\u007F");
@@ -72,8 +74,6 @@ const RuneMatcher DASH = const _SingleRuneMatcher(45);
 const RuneMatcher DQUOTE = const _SingleRuneMatcher(34);
 
 const RuneMatcher FORWARD_SLASH = const _SingleRuneMatcher(47);
-
-const RuneMatcher GLOB = const _SingleRuneMatcher(42);
 
 final RuneMatcher HEXDIG = NUMERIC | anyOf("ABCDEF");
 
