@@ -5,7 +5,7 @@ class _ListParser extends AbstractParser<ImmutableSequence> implements Parser<Im
   
   factory _ListParser.concat(final Parser fst, final Parser snd) {    
     ImmutableSequence<Parser> parsers =
-        (fst is _ListParser) ? fst._parsers : Persistent.EMPTY_SEQUENCE.add(fst);
+        (fst is _ListParser) ? fst._parsers : EMPTY_SEQUENCE.add(fst);
     parsers =
         (snd is _ListParser) ? parsers.addAll(snd._parsers) : parsers.add(snd);
     return new _ListParser(parsers);     
@@ -14,7 +14,7 @@ class _ListParser extends AbstractParser<ImmutableSequence> implements Parser<Im
   const _ListParser(this._parsers);
   
   Option<ImmutableSequence> doParse(final StringIterator itr) {
-    ImmutableSequence tokens = Persistent.EMPTY_SEQUENCE;
+    ImmutableSequence tokens = EMPTY_SEQUENCE;
     
     for(final Parser p in _parsers) {
       final Option parseResult = p.parseFrom(itr);
