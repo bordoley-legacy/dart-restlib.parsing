@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 abstract class RuneMatcher extends AbstractParser<int> {  
   const RuneMatcher._internal();

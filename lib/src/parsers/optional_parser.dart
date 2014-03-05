@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class _OptionalParser<T> extends AbstractParser<Option<T>> {
   final Parser<T> delegate;

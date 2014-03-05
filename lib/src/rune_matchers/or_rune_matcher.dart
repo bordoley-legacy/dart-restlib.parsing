@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class _OrRuneMatcher extends RuneMatcher {
   final RuneMatcher fst;

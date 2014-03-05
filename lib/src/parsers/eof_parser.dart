@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class _EofParser extends AbstractParser<String> {
   static const EMPTY_STRING_OPTION = const Option.constant("");

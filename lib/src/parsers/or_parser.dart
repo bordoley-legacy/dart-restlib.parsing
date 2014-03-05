@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class _OrParser<T> extends AbstractParser<T> {
   final _EitherParser<T,T> delegate;

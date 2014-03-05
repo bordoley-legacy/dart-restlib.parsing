@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class _AnyRuneMatcher extends RuneMatcher {
   const _AnyRuneMatcher() : super._internal();

@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 typedef dynamic _MapFunc(dynamic e);
 typedef Option _FlatMapFunc(dynamic e);

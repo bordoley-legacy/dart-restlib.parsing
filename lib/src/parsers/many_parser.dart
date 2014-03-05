@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class _ManyParser<T> extends AbstractParser<Iterable<T>> {
   final Parser<T> delegate;

@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class _InRangeRuneMatcher extends RuneMatcher {
   final int start;

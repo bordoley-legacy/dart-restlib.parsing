@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class _SingleRuneMatcher extends RuneMatcher {
   final int _rune;

@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 abstract class AbstractParser<T> implements Parser<T> {
   const AbstractParser();

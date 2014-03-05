@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class _EitherParser<T1, T2> extends AbstractParser<Either<T1, T2>> {
   final Parser<T1> fst;

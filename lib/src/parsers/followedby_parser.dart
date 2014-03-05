@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class _FollowedByParser<T> extends AbstractParser<T> {
   final Parser<T> parser;

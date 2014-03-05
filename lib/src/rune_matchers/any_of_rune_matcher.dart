@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class _AnyOfRuneMatcher extends RuneMatcher {
   final String _runes;

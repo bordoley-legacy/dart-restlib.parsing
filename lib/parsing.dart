@@ -1,4 +1,4 @@
-library restlib.parsing;
+library parsing;
 
 import "dart:collection";
 

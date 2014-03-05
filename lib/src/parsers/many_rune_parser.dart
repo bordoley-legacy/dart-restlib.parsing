@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class _ManyRuneParser extends AbstractParser<IterableString> {
   final RuneMatcher matcher;

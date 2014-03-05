@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class _ListParser extends AbstractParser<ImmutableSequence> implements Parser<ImmutableSequence> {
   final ImmutableSequence<Parser> _parsers;

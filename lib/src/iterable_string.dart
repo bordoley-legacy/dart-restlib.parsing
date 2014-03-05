@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class IterableString extends IterableBase<int> {
   static const IterableString EMPTY = const IterableString._internal("");

@@ -1,4 +1,4 @@
-part of restlib.parsing;
+part of parsing;
 
 class _RecurseParser<T> extends AbstractParser<T> {
   final delegate;
