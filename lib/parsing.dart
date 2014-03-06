@@ -53,16 +53,16 @@ const RuneMatcher COMMA = const _SingleRuneMatcher(44);
 
 const RuneMatcher CR = const _SingleRuneMatcher(13);
 
-final Parser<IterableString> CRLF = CR + LF;
+final Parser<String> CRLF = string("\r\n");
 
 final RuneMatcher CTL = inRange("\u0000", "\u001F") | isChar("\u007F");
 
-final Parser<int> DIGIT = NUMERIC.map((final int rune) => 
+final Parser<int> DIGIT = NUMERIC.map((final int rune) =>
     rune - 48);
 
-final Parser<int> INTEGER = 
-  NUMERIC.many1().map((final IterableString digits) => 
-      digits.fold(0, (final int accumulator, final int rune) => 
+final Parser<int> INTEGER =
+  NUMERIC.many1().map((final IterableString digits) =>
+      digits.fold(0, (final int accumulator, final int rune) =>
           (accumulator * 10) + (rune - 48)));
 
 const Parser<String> EOF = const _EofParser();
@@ -102,9 +102,9 @@ final RuneMatcher VCHAR = inRange("\u0021", "\u007E");
 final RuneMatcher WSP = anyOf(" \t");
 
 RuneMatcher anyOf(final String runes) =>
-    (runes.length == 0) ? NONE : new _AnyOfRuneMatcher(runes); 
+    (runes.length == 0) ? NONE : new _AnyOfRuneMatcher(runes);
 
-RuneMatcher inRange(final String start, final String finish) => 
+RuneMatcher inRange(final String start, final String finish) =>
     new _InRangeRuneMatcher(start.runes.single, finish.runes.single);
 
 RuneMatcher isChar(final String rune) =>
@@ -116,5 +116,5 @@ RuneMatcher noneOf(final String runes) =>
 Parser rec(Parser parser()) =>
     new _RecurseParser(parser);
 
-Parser<String> string(final String string) => 
+Parser<String> string(final String string) =>
     new _StringParser(string);
