@@ -3,6 +3,7 @@ library parsing;
 import "dart:collection";
 
 import "package:restlib_common/collections.dart";
+import "package:restlib_common/collections.forwarding.dart";
 import "package:restlib_common/collections.immutable.dart";
 import "package:restlib_common/preconditions.dart";
 
