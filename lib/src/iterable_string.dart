@@ -35,7 +35,8 @@ abstract class CodePointIterator implements IndexedIterator<int> {
 
   // FIXME: Add UTF-8
 
-  String rangeToString(int start, int end);
+  String substring(int start, int end);
+  List<int> substringBytes(int start, int end);
 }
 
 class _AsciiIterator
@@ -56,8 +57,11 @@ class _AsciiIterator
     return retval;
   }
 
-  String rangeToString(int start, int end) =>
-      ASCII.decode(subList(this.iterable, start+1, end - start -1), allowInvalid:false);
+  String substring(int start, int end) =>
+      ASCII.decode(substringBytes(start, end), allowInvalid:false);
+
+  List<int> substringBytes(int start, int end) =>
+      subList(this.iterable, start+1, end - start -1);
 }
 
 class _Latin1Iterator
@@ -79,8 +83,11 @@ class _Latin1Iterator
     return retval;
   }
 
-  String rangeToString(int start, int end) =>
-      LATIN1.decode(subList(this.iterable, start+1, end - start -1), allowInvalid:false);
+  String substring(int start, int end) =>
+      LATIN1.decode(substringBytes(start, end), allowInvalid:false);
+
+  List<int> substringBytes(int start, int end) =>
+      subList(this.iterable, start+1, end - start -1);
 }
 
 class _StringIterator implements CodePointIterator {
@@ -141,8 +148,11 @@ class _StringIterator implements CodePointIterator {
     }
   }
 
-  String rangeToString(int start, int end) =>
+  String substring(int start, int end) =>
       this.iterable.toString().substring(start, end);
+
+  List<int> substringBytes(int start, int end) =>
+      substring(start, end).codeUnits;
 
   String toString() =>
       "StringIterator($string, $index)";

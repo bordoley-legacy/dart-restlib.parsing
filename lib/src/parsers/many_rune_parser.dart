@@ -10,7 +10,7 @@ class _ManyRuneParser extends AbstractParser<IterableString> {
 
     while(itr.moveNext() && matcher.matches(itr.current));
     final int endIndex = itr.index;
-    final String result = itr.rangeToString(startIndex + 1, endIndex);
+    final String result = itr.substring(startIndex + 1, endIndex);
 
     itr.movePrevious();
 
