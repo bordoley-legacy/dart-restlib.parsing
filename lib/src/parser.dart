@@ -47,11 +47,10 @@ abstract class AbstractParser<T> implements Parser<T> {
     final int startIndex = itr.index;
     final Option<T> token = doParse(itr);
 
-    if (!itr.moveNext()) {
+    if (itr.reachedEof) {
       return Option.NONE;
     }
 
-    itr.movePrevious();
     if (token.isEmpty) {
       itr.index = startIndex;
     }

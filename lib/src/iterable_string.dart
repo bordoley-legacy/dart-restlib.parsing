@@ -35,6 +35,8 @@ abstract class CodePointIterator implements IndexedIterator<int> {
 
   // FIXME: Add UTF-8
 
+  bool get reachedEof;
+
   String substring(int start, int end);
   List<int> substringBytes(int start, int end);
 }
@@ -47,6 +49,8 @@ class _AsciiIterator
     implements CodePointIterator {
   final IndexedIterator<int> _delegate;
 
+  bool reachedEof = false;
+
   _AsciiIterator(final List<int> bytes) :
     this._delegate = new IndexedIterator.list(bytes);
 
@@ -55,6 +59,31 @@ class _AsciiIterator
 
     checkState(retval < 128 && retval >=0);
     return retval;
+  }
+
+  void set index(final int index) {
+    super.index = index;
+    if (index < delegate.iterable.length) {
+      reachedEof = false;
+    }
+  }
+
+  bool moveNext() {
+    if (reachedEof) {
+      return true;
+    }
+
+    if (!reachedEof && !super.moveNext()) {
+      reachedEof = true;
+      return false;
+    }
+
+    return true;
+  }
+
+  bool movePrevious() {
+    reachedEof = false;
+    super.movePrevious();
   }
 
   String substring(int start, int end) =>
@@ -70,17 +99,44 @@ class _Latin1Iterator
       ForwardingBidirectionalIterator<int>,
       ForwardingIndexedIterator<int>
     implements CodePointIterator {
-  final IndexedIterator<int> _delegate;
+  final IndexedIterator<int> delegate;
+
+  bool reachedEof = false;
 
   _Latin1Iterator(final List<int> bytes) :
-    this._delegate = new IndexedIterator.list(bytes);
+    this.delegate = new IndexedIterator.list(bytes);
 
   int get current {
-    final int retval = _delegate.current;
+    final int retval = delegate.current;
 
     // FIXME: This range could be tightened up
     checkState(retval < 256 && retval >=0);
     return retval;
+  }
+
+  void set index(final int index) {
+    super.index = index;
+    if (index < delegate.iterable.length) {
+      reachedEof = false;
+    }
+  }
+
+  bool moveNext() {
+    if (reachedEof) {
+      return true;
+    }
+
+    if (!reachedEof && !super.moveNext()) {
+      reachedEof = true;
+      return false;
+    }
+
+    return true;
+  }
+
+  bool movePrevious() {
+    reachedEof = false;
+    super.movePrevious();
   }
 
   String substring(int start, int end) =>
@@ -94,6 +150,8 @@ class _StringIterator implements CodePointIterator {
   int _current = null;
   int _index = -1;
   final IterableString iterable;
+
+  bool reachedEof = false;
 
   _StringIterator(this.iterable);
 
@@ -126,19 +184,32 @@ class _StringIterator implements CodePointIterator {
     }
     _index = index;
     _updateCurrent();
+
+    if (index < iterable.length) {
+      reachedEof = false;
+    }
+
   }
 
   bool moveNext() {
-    if (index < iterable.toString().length) {
-      _moveIndexToNextCodePointIndex();
-      _updateCurrent();
-      return !(index == iterable.toString().length);
-    } else {
+    if (reachedEof) {
       return false;
     }
+
+    if (index >= iterable.toString().length) {
+      return false;
+    }
+
+    _moveIndexToNextCodePointIndex();
+    _updateCurrent();
+    reachedEof = !(index == iterable.toString().length);
+    return reachedEof;
+
   }
 
   bool movePrevious() {
+    reachedEof = false;
+
     if (index > -1) {
       _moveIndexToPreviousCodePointIndex();
       _updateCurrent();
