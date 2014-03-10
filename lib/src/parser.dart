@@ -46,6 +46,12 @@ abstract class AbstractParser<T> implements Parser<T> {
   Option<T> parseFrom(final CodePointIterator itr) {
     final int startIndex = itr.index;
     final Option<T> token = doParse(itr);
+
+    if (!itr.moveNext()) {
+      return Option.NONE;
+    }
+
+    itr.movePrevious();
     if (token.isEmpty) {
       itr.index = startIndex;
     }
@@ -102,6 +108,8 @@ abstract class Parser<T> {
 
   T parseValue(String str);
 
+  // Parse a value from the CodePointIterator. If EOF is reached, Option.NONE is returned and
+  // the iterator is not reset. If parsing fails before reaching EOF, the iterator is reset to the start point.
   Option<T> parseFrom(CodePointIterator itr);
 
   Parser<Iterable<T>> sepBy(Parser delim);
