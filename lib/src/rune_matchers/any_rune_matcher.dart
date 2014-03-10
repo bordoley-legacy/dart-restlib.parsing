@@ -2,28 +2,28 @@ part of parsing;
 
 class _AnyRuneMatcher extends RuneMatcher {
   const _AnyRuneMatcher() : super._internal();
-  
-  RuneMatcher operator &(final RuneMatcher other) => 
+
+  RuneMatcher operator &(final RuneMatcher other) =>
       other;
- 
-  RuneMatcher operator|(final RuneMatcher other) => 
+
+  RuneMatcher operator|(final RuneMatcher other) =>
       this;
-  
-  Option<int> doParse(final StringIterator itr) =>
+
+  Option<int> doParse(final IndexedIterator<int> itr) =>
       (itr.moveNext()) ? new Option(itr.current) : Option.NONE;
-  
-  bool matches(final int rune) => 
+
+  bool matches(final int rune) =>
       true;
-  
-  bool matchesAllOf(final String val) => 
+
+  bool matchesAllOf(final String val) =>
       true;
-  
-  bool matchesNoneOf(final String val) => 
+
+  bool matchesNoneOf(final String val) =>
       false;
-  
-  RuneMatcher negate() => 
+
+  RuneMatcher negate() =>
       NONE;
-  
-  String toString() => 
+
+  String toString() =>
       "*";
 }

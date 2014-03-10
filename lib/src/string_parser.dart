@@ -1,26 +1,26 @@
 part of parsing;
 
 class _StringParser extends AbstractParser<String> {
-  final String str;
-  
-  const _StringParser(this.str);
-  
-  Option<String> doParse(final StringIterator itr) {
-    final int startIndx = itr.index + 1;
-    final int endIndx = startIndx + str.length;
-    
-    if (endIndx > itr.string.length) {
-      return Option.NONE;
-    } 
-    
-    if (str == itr.string.substring(startIndx, endIndx)) {
-      itr.index = endIndx - 1;
-      return new Option(str);
-    } else {
-      return Option.NONE;
+  final IterableString str;
+  final Option<String> retval;
+
+  const _StringParser(this.str, this.retval);
+
+  Option<String> doParse(final IndexedIterator<int> itr) {
+    final Iterator<int> ref = str.iterator;
+
+    while(ref.moveNext()) {
+      if (!itr.moveNext()) {
+        return Option.NONE;
+      }
+
+      if (itr.current != ref.current) {
+        return Option.NONE;
+      }
     }
+    return retval;
   }
-  
-  String toString() => 
+
+  String toString() =>
       "${str}";
 }

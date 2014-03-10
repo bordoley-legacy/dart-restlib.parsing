@@ -2,12 +2,12 @@ part of parsing;
 
 class _ManyParser<T> extends AbstractParser<Iterable<T>> {
   final Parser<T> delegate;
-  
+
   const _ManyParser(this.delegate);
-  
-  Option<Iterable<T>> doParse(final StringIterator itr) {
+
+  Option<Iterable<T>> doParse(final IndexedIterator<int> itr) {
     ImmutableSequence<T> retval = EMPTY_SEQUENCE;
-    
+
     Option<T> t = Option.NONE;
     while ((t = delegate.parseFrom(itr)).isNotEmpty) {
       retval = retval.add(t.value);
@@ -15,7 +15,7 @@ class _ManyParser<T> extends AbstractParser<Iterable<T>> {
 
     return new Option(retval);
   }
-  
-  String toString() => 
+
+  String toString() =>
       "($delegate)*";
 }

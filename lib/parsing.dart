@@ -117,4 +117,4 @@ Parser rec(Parser parser()) =>
     new _RecurseParser(parser);
 
 Parser<String> string(final String string) =>
-    new _StringParser(string);
+    new _StringParser(new IterableString(string), new Option(string));

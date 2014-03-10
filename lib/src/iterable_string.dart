@@ -13,19 +13,19 @@ class IterableString extends IterableBase<int> {
   bool get isEmpty =>
       _string.isEmpty;
 
-  StringIterator get iterator =>
-      new StringIterator(_string);
+  IndexedIterator<int> get iterator =>
+      new _StringIterator(_string);
 
   String toString() =>
       _string;
 }
 
-class StringIterator implements BidirectionalIterator<int> {
+class _StringIterator implements IndexedIterator<int> {
   int _current = null;
   int _index = -1;
   final String string;
 
-  StringIterator(this.string);
+  _StringIterator(this.string);
 
   int get current {
     if (_current == null) {
@@ -35,6 +35,7 @@ class StringIterator implements BidirectionalIterator<int> {
     return _current;
   }
 
+  /*
   String get currentAsString {
     if (_current == null) {
       throw new StateError("Index is out of bounds");
@@ -42,7 +43,7 @@ class StringIterator implements BidirectionalIterator<int> {
     return _isLeadSurrogate(string.codeUnitAt(index)) ?
         string.substring(index, index + 2) :
         string.substring(index, index + 1);
-  }
+  }*/
 
   int get index => _index;
 
