@@ -5,7 +5,7 @@ class _OptionalParser<T> extends AbstractParser<Option<T>> {
 
   const _OptionalParser(this.delegate);
 
-  Option<Option<T>> doParse(final IndexedIterator<int> itr) =>
+  Option<Option<T>> doParse(final CodePointIterator itr) =>
       new Option(delegate.parseFrom(itr));
 
   String toString() =>

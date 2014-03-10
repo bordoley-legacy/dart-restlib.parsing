@@ -6,7 +6,7 @@ class _StringParser extends AbstractParser<String> {
 
   const _StringParser(this.str, this.retval);
 
-  Option<String> doParse(final IndexedIterator<int> itr) {
+  Option<String> doParse(final CodePointIterator itr) {
     final Iterator<int> ref = str.iterator;
 
     while(ref.moveNext()) {

@@ -6,7 +6,7 @@ class _FollowedByParser<T> extends AbstractParser<T> {
 
   const _FollowedByParser(this.parser, this.next);
 
-  Option<T> doParse(final IndexedIterator<int> itr) =>
+  Option<T> doParse(final CodePointIterator itr) =>
       parser.parseFrom(itr).map((final T result) {
         final int startPos = itr.index;
         final T retval =

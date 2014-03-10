@@ -6,7 +6,7 @@ class _RecurseParser<T> extends AbstractParser<T> {
   _RecurseParser(Parser<T> delegate()) :
     this.delegate = delegate;
 
-  Option<T> doParse(final IndexedIterator<int> itr) =>
+  Option<T> doParse(final CodePointIterator itr) =>
       delegate().parseFrom(itr);
 
   String toString() =>

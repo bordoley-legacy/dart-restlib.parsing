@@ -5,7 +5,7 @@ class _EofParser extends AbstractParser<String> {
 
   const _EofParser();
 
-  Option<String> doParse(final IndexedIterator<int> itr) =>
+  Option<String> doParse(final CodePointIterator itr) =>
       itr.moveNext() ? Option.NONE : EMPTY_STRING_OPTION;
 
   String toString() =>

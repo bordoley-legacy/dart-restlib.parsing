@@ -6,7 +6,7 @@ class _OrParser<T> extends AbstractParser<T> {
   _OrParser(Parser<T> fst, Parser<T> snd):
     delegate = fst ^ snd;
 
-  Option<T> doParse(final IndexedIterator<int> itr) =>
+  Option<T> doParse(final CodePointIterator itr) =>
       delegate.parseFrom(itr).map((final Either<T,T> either) =>
           either.value);
 }

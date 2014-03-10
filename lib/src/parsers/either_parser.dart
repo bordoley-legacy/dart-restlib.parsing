@@ -6,7 +6,7 @@ class _EitherParser<T1, T2> extends AbstractParser<Either<T1, T2>> {
 
   const _EitherParser(this.fst, this.snd);
 
-  Option<Either<T1, T2>> doParse(final IndexedIterator<int> itr) {
+  Option<Either<T1, T2>> doParse(final CodePointIterator itr) {
     final Option retval = fst.parseFrom(itr).map((final T1 e) =>
             new Either.leftValue(e));
 

@@ -13,7 +13,7 @@ class _ListParser extends AbstractParser<Tuple> implements Parser<Tuple> {
 
   const _ListParser(this._parsers);
 
-  Option<Tuple> doParse(final IndexedIterator<int> itr) {
+  Option<Tuple> doParse(final CodePointIterator itr) {
     ImmutableSequence tokens = EMPTY_SEQUENCE;
 
     for(final Parser p in _parsers) {

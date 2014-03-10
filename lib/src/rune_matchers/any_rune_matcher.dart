@@ -9,7 +9,7 @@ class _AnyRuneMatcher extends RuneMatcher {
   RuneMatcher operator|(final RuneMatcher other) =>
       this;
 
-  Option<int> doParse(final IndexedIterator<int> itr) =>
+  Option<int> doParse(final CodePointIterator itr) =>
       (itr.moveNext()) ? new Option(itr.current) : Option.NONE;
 
   bool matches(final int rune) =>

@@ -18,7 +18,7 @@ abstract class AbstractParser<T> implements Parser<T> {
   Parser<T> followedBy(final Parser p) =>
       new _FollowedByParser(this, p);
 
-  Option<T> doParse(IndexedIterator<int> itr);
+  Option<T> doParse(CodePointIterator itr);
 
   Parser<Iterable<T>> many() =>
       new _ManyParser(this);
@@ -43,7 +43,7 @@ abstract class AbstractParser<T> implements Parser<T> {
           e.first)
         .parseFrom(new IterableString(str).iterator);
 
-  Option<T> parseFrom(final IndexedIterator<int> itr) {
+  Option<T> parseFrom(final CodePointIterator itr) {
     final int startIndex = itr.index;
     final Option<T> token = doParse(itr);
     if (token.isEmpty) {
@@ -102,7 +102,7 @@ abstract class Parser<T> {
 
   T parseValue(String str);
 
-  Option<T> parseFrom(IndexedIterator<int> itr);
+  Option<T> parseFrom(CodePointIterator itr);
 
   Parser<Iterable<T>> sepBy(Parser delim);
 

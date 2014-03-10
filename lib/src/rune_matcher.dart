@@ -19,7 +19,7 @@ abstract class RuneMatcher extends AbstractParser<int> {
   RuneMatcher operator|(final RuneMatcher other) =>
       new _OrRuneMatcher(this, other);
 
-  Option<int> doParse(final IndexedIterator<int> itr) =>
+  Option<int> doParse(final CodePointIterator itr) =>
       (itr.moveNext() && matches(itr.current)) ?
           new Option(itr.current) :
             Option.NONE;

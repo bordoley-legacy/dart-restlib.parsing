@@ -13,19 +13,56 @@ class IterableString extends IterableBase<int> {
   bool get isEmpty =>
       _string.isEmpty;
 
-  IndexedIterator<int> get iterator =>
-      new _StringIterator(_string);
+  CodePointIterator get iterator =>
+      new StringIterator._(this);
 
   String toString() =>
       _string;
 }
 
-class _StringIterator implements IndexedIterator<int> {
+abstract class CodePointIterator implements IndexedIterator<int> {
+  factory CodePointIterator.latin1(final List<int> bytes) =>
+      new _Latin1Iterator(bytes);
+
+}
+
+class _Latin1Iterator implements CodePointIterator {
+  final IndexedIterator<int> _delegate;
+
+  _Latin1Iterator(final List<int> bytes) :
+    this._delegate = new IndexedIterator.list(bytes);
+
+  int get current {
+    final int retval = _delegate.current;
+
+    // FIXME: This range could be tightened up
+    checkState(retval < 256 && retval >=0);
+    return retval;
+  }
+
+  int get index =>
+      _delegate.index;
+
+  void set index(int idx) {
+      _delegate.index = idx;
+  }
+
+  List<int> get iterable =>
+      _delegate.iterable;
+
+  bool moveNext() =>
+      _delegate.moveNext();
+
+  bool movePrevious() =>
+        _delegate.movePrevious();
+}
+
+class StringIterator implements CodePointIterator {
   int _current = null;
   int _index = -1;
-  final String string;
+  final IterableString iterable;
 
-  _StringIterator(this.string);
+  StringIterator._(this.iterable);
 
   int get current {
     if (_current == null) {
@@ -48,10 +85,10 @@ class _StringIterator implements IndexedIterator<int> {
   int get index => _index;
 
   void set index(final int index) {
-    checkRangeInclusive(-1, string.length, index);
+    checkRangeInclusive(-1, iterable.toString().length, index);
     if ((index > 0) &&
-        (index < string.length) &&
-        _isTrailSurrogate(string.codeUnitAt(index))) {
+        (index < iterable.toString().length) &&
+        _isTrailSurrogate(iterable.toString().codeUnitAt(index))) {
       throw new ArgumentError("Index inside surrogate pair: $index");
     }
     _index = index;
@@ -59,10 +96,10 @@ class _StringIterator implements IndexedIterator<int> {
   }
 
   bool moveNext() {
-    if (index < string.length) {
+    if (index < iterable.toString().length) {
       _moveIndexToNextCodePointIndex();
       _updateCurrent();
-      return !(index == string.length);
+      return !(index == iterable.toString().length);
     } else {
       return false;
     }
@@ -83,8 +120,8 @@ class _StringIterator implements IndexedIterator<int> {
 
   void _moveIndexToNextCodePointIndex() {
     if ((index > -1) &&
-        (index < string.length - 1) &&
-        _isLeadSurrogate(string.codeUnitAt(index))) {
+        (index < iterable.toString().length - 1) &&
+        _isLeadSurrogate(iterable.toString().codeUnitAt(index))) {
       _index++;
     }
     _index++;
@@ -92,25 +129,26 @@ class _StringIterator implements IndexedIterator<int> {
 
   void _moveIndexToPreviousCodePointIndex() {
     if ((index > 0) &&
-        (index < string.length) &&
-        _isTrailSurrogate(string.codeUnitAt(index))) {
+        (index < iterable.toString().length) &&
+        _isTrailSurrogate(iterable.toString().codeUnitAt(index))) {
       _index--;
     }
     _index--;
   }
 
   void _updateCurrent() {
-    if (index == string.length || index < 0) {
+    if (index == iterable.toString().length || index < 0) {
       this._current = null;
     } else {
-      int codeUnit = string.codeUnitAt(index);
+      int codeUnit = iterable.toString().codeUnitAt(index);
       this._current =
-          _isLeadSurrogate(string.codeUnitAt(index)) ?
-            _combineSurrogatePair(codeUnit, string.codeUnitAt(index + 1)) :
+          _isLeadSurrogate(iterable.toString().codeUnitAt(index)) ?
+            _combineSurrogatePair(codeUnit, iterable.toString().codeUnitAt(index + 1)) :
               codeUnit;
     }
   }
 }
+
 
 // Is then code (a 16-bit unsigned integer) a UTF-16 lead surrogate.
 bool _isLeadSurrogate(final int code) =>

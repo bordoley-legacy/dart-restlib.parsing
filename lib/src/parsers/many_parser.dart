@@ -5,7 +5,7 @@ class _ManyParser<T> extends AbstractParser<Iterable<T>> {
 
   const _ManyParser(this.delegate);
 
-  Option<Iterable<T>> doParse(final IndexedIterator<int> itr) {
+  Option<Iterable<T>> doParse(final CodePointIterator itr) {
     ImmutableSequence<T> retval = EMPTY_SEQUENCE;
 
     Option<T> t = Option.NONE;
