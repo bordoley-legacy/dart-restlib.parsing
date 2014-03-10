@@ -34,10 +34,8 @@ abstract class CodePointIterator implements IndexedIterator<int> {
       new _StringIterator(new IterableString(string));
 
   // FIXME: Add UTF-8
-}
 
-abstract class AsciiIterator implements CodePointIterator {
-  List<int> get iterable;
+  String rangeToString(int start, int end);
 }
 
 class _AsciiIterator
@@ -45,7 +43,7 @@ class _AsciiIterator
     with ForwardingIterator<int>,
       ForwardingBidirectionalIterator<int>,
       ForwardingIndexedIterator<int>
-    implements AsciiIterator {
+    implements CodePointIterator {
   final IndexedIterator<int> _delegate;
 
   _AsciiIterator(final List<int> bytes) :
@@ -57,10 +55,9 @@ class _AsciiIterator
     checkState(retval < 128 && retval >=0);
     return retval;
   }
-}
 
-abstract class Latin1Iterator implements CodePointIterator {
-  List<int> get iterable;
+  String rangeToString(int start, int end) =>
+      ASCII.decode(subList(this.iterable, start+1, end - start -1), allowInvalid:false);
 }
 
 class _Latin1Iterator
@@ -68,7 +65,7 @@ class _Latin1Iterator
     with ForwardingIterator<int>,
       ForwardingBidirectionalIterator<int>,
       ForwardingIndexedIterator<int>
-    implements Latin1Iterator {
+    implements CodePointIterator {
   final IndexedIterator<int> _delegate;
 
   _Latin1Iterator(final List<int> bytes) :
@@ -81,13 +78,12 @@ class _Latin1Iterator
     checkState(retval < 256 && retval >=0);
     return retval;
   }
+
+  String rangeToString(int start, int end) =>
+      LATIN1.decode(subList(this.iterable, start+1, end - start -1), allowInvalid:false);
 }
 
-abstract class StringIterator implements CodePointIterator {
-  IterableString get iterable;
-}
-
-class _StringIterator implements StringIterator {
+class _StringIterator implements CodePointIterator {
   int _current = null;
   int _index = -1;
   final IterableString iterable;
@@ -144,6 +140,9 @@ class _StringIterator implements StringIterator {
       return false;
     }
   }
+
+  String rangeToString(int start, int end) =>
+      this.iterable.toString().substring(start, end);
 
   String toString() =>
       "StringIterator($string, $index)";

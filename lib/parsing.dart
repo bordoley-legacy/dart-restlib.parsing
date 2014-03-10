@@ -1,6 +1,7 @@
 library parsing;
 
 import "dart:collection";
+import "dart:convert";
 
 import "package:restlib_common/collections.dart";
 import "package:restlib_common/collections.forwarding.dart";
