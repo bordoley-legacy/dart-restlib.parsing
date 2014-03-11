@@ -8,6 +8,9 @@ import "package:restlib_common/collections.forwarding.dart";
 import "package:restlib_common/collections.immutable.dart";
 import "package:restlib_common/preconditions.dart";
 
+part "src/iterable_string/ascii.dart";
+part "src/iterable_string/latin1.dart";
+part "src/iterable_string/utf_16.dart";
 part "src/parsers/either_parser.dart";
 part "src/parsers/eof_parser.dart";
 part "src/parsers/followedby_parser.dart";
@@ -26,10 +29,11 @@ part "src/rune_matchers/negate_rune_matcher.dart";
 part "src/rune_matchers/none_rune_matcher.dart";
 part "src/rune_matchers/or_rune_matcher.dart";
 part "src/rune_matchers/single_rune_matcher.dart";
+part "src/abstract_parser.dart";
 part "src/iterable_string.dart";
 part "src/parser.dart";
 part "src/rune_matcher.dart";
-part "src/string_parser.dart";
+part "src/parsers/string_parser.dart";
 
 // See http://tools.ietf.org/html/rfc5234#appendix-B.1
 
@@ -94,6 +98,10 @@ final RuneMatcher OCTET = inRange("\u0000", "\u00FF");
 const RuneMatcher OPEN_PARENTHESES = const _SingleRuneMatcher(40);
 
 const RuneMatcher PERIOD = const _SingleRuneMatcher(46);
+
+const RuneMatcher POUND_SIGN = const _SingleRuneMatcher(35);
+
+const RuneMatcher QUESTION_MARK = const _SingleRuneMatcher(63);
 
 const RuneMatcher SEMICOLON = const _SingleRuneMatcher(59);
 
