@@ -112,7 +112,7 @@ class _Utf16Iterator implements CodePointIterator {
 
     _moveIndexToNextCodePointIndex();
     _updateCurrent();
-    reachedEof = !(index == iterable.toString().length);
+    reachedEof = (index == iterable.toString().length);
     return !reachedEof;
 
   }
