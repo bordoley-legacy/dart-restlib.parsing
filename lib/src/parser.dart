@@ -44,14 +44,15 @@ abstract class AbstractParser<T> implements Parser<T> {
         .parseFrom(new IterableString(str).iterator);
 
   Option<T> parseFrom(final CodePointIterator itr) {
-    if(itr.reachedEof) {
-      return Option.NONE;
-    }
-
     final int startIndex = itr.index;
     final Option<T> token = doParse(itr);
 
-    if (token.isEmpty && !itr.reachedEof) {
+    if (!itr.moveNext()) {
+      return Option.NONE;
+    }
+
+    itr.movePrevious();
+    if (token.isEmpty) {
       itr.index = startIndex;
     }
     return token;
