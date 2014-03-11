@@ -38,10 +38,7 @@ abstract class AbstractParser<T> implements Parser<T> {
         opt.orElse(alternative));
 
   Option<T> parse(final String str) =>
-      (this + EOF)
-        .map((final Iterable e) =>
-          e.first)
-        .parseFrom(new IterableString(str).iterator);
+      parseFrom(new IterableString(str).iterator);
 
   Option<T> parseFrom(final CodePointIterator itr) {
     if(itr.reachedEof) {
