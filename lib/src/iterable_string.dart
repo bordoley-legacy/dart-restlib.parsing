@@ -175,7 +175,7 @@ class _AsciiString extends IterableBase<int> implements IterableString {
       new _AsciiIterator(this);
 
   IterableString substring(int startIndex, [int endIndex]) =>
-      new _AsciiString(subList(this._bytes, startIndex, endIndex - startIndex));
+      new _AsciiString(sublist(this._bytes, startIndex, endIndex - startIndex));
 
   String toString() =>
       ASCII.decode(_bytes, allowInvalid:false);
@@ -244,7 +244,7 @@ class _Latin1String extends IterableBase<int> implements IterableString {
       new _Latin1Iterator(this);
 
   IterableString substring(int startIndex, [int endIndex]) =>
-      new _Latin1String(subList(this._bytes, startIndex, endIndex - startIndex));
+      new _Latin1String(sublist(this._bytes, startIndex, endIndex - startIndex));
 
   String toString() =>
       LATIN1.decode(_bytes, allowInvalid:false);
