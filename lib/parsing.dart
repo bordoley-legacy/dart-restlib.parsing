@@ -9,6 +9,7 @@ import "package:restlib_common/collections.immutable.dart";
 import "package:restlib_common/preconditions.dart";
 
 part "src/parsers/either_parser.dart";
+part "src/parsers/eof_parser.dart";
 part "src/parsers/followedby_parser.dart";
 part "src/parsers/list_parser.dart";
 part "src/parsers/many_parser.dart";
@@ -65,6 +66,8 @@ final Parser<int> INTEGER =
   NUMERIC.many1().map((final IterableString digits) =>
       digits.fold(0, (final int accumulator, final int rune) =>
           (accumulator * 10) + (rune - 48)));
+
+const Parser<String> EOF = const _EofParser();
 
 const RuneMatcher EQUALS = const _SingleRuneMatcher(61);
 
