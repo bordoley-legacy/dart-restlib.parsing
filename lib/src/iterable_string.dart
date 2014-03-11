@@ -3,6 +3,7 @@ part of parsing;
 abstract class IterableString implements Iterable<int> {
   static const IterableString EMPTY_UTF_16 = const _Utf16String._internal("");
   static const IterableString EMPTY_ASCII = const _AsciiString(EMPTY_LIST);
+  static const IterableString EMPTY_LATIN1 = const _Latin1String(EMPTY_LIST);
 
   factory IterableString(final String string) =>
       checkNotNull(string).isEmpty ? EMPTY_UTF_16 : new _Utf16String._internal(string);
@@ -11,7 +12,7 @@ abstract class IterableString implements Iterable<int> {
       checkNotNull(bytes).isEmpty ? EMPTY_ASCII : new _AsciiString(bytes);
 
   factory IterableString.latin1(final List<int> bytes) =>
-      null;
+      checkNotNull(bytes).isEmpty ? EMPTY_LATIN1 : new _Latin1String(bytes);
 
   factory IterableString.utf8(final List<int> bytes) =>
         null;
@@ -109,14 +110,10 @@ class _Utf16Iterator implements CodePointIterator {
       return false;
     }
 
-    if (index >= iterable.toString().length) {
-      return false;
-    }
-
     _moveIndexToNextCodePointIndex();
     _updateCurrent();
     reachedEof = !(index == iterable.toString().length);
-    return reachedEof;
+    return !reachedEof;
 
   }
 
@@ -131,15 +128,6 @@ class _Utf16Iterator implements CodePointIterator {
       return false;
     }
   }
-
-  String substring(int start, int end) =>
-      this.iterable.toString().substring(start, end);
-
-  List<int> substringBytes(int start, int end) =>
-      substring(start, end).codeUnits;
-
-  String toString() =>
-      "StringIterator($string, $index)";
 
   void _moveIndexToNextCodePointIndex() {
     if ((index > -1) &&
@@ -224,7 +212,7 @@ class _AsciiIterator
 
   bool moveNext() {
     if (reachedEof) {
-      return true;
+      return false;
     }
 
     if (!reachedEof && !super.moveNext()) {
@@ -237,7 +225,7 @@ class _AsciiIterator
 
   bool movePrevious() {
     reachedEof = false;
-    super.movePrevious();
+    return super.movePrevious();
   }
 }
 
@@ -294,7 +282,7 @@ class _Latin1Iterator
 
   bool moveNext() {
     if (reachedEof) {
-      return true;
+      return false;
     }
 
     if (!reachedEof && !super.moveNext()) {
@@ -307,7 +295,7 @@ class _Latin1Iterator
 
   bool movePrevious() {
     reachedEof = false;
-    super.movePrevious();
+    return super.movePrevious();
   }
 }
 
