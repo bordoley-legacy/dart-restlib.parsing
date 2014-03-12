@@ -1,7 +1,7 @@
 part of parsing;
 
-class _AnyRuneMatcher extends RuneMatcher {
-  const _AnyRuneMatcher() : super._internal();
+class _AnyRuneMatcher extends _AbstractRuneMatcher {
+  const _AnyRuneMatcher() : super();
 
   RuneMatcher operator &(final RuneMatcher other) =>
       other;

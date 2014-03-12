@@ -30,6 +30,7 @@ part "src/rune_matchers/none_rune_matcher.dart";
 part "src/rune_matchers/or_rune_matcher.dart";
 part "src/rune_matchers/single_rune_matcher.dart";
 part "src/abstract_parser.dart";
+part "src/abstract_rune_matcher.dart";
 part "src/iterable_string.dart";
 part "src/parser.dart";
 part "src/rune_matcher.dart";

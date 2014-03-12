@@ -1,13 +1,13 @@
 part of parsing;
 
-class _NegateRuneMatcher extends RuneMatcher {
+class _NegateRuneMatcher extends _AbstractRuneMatcher {
   final RuneMatcher delegate;
-  
-  const _NegateRuneMatcher(this.delegate) : super._internal();
-  
-  bool matches(final int rune) => 
+
+  const _NegateRuneMatcher(this.delegate) : super();
+
+  bool matches(final int rune) =>
       !delegate.matches(rune);
-  
-  String toString() => 
+
+  String toString() =>
       "~($delegate)";
 }
