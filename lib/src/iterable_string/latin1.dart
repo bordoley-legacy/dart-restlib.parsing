@@ -30,7 +30,7 @@ class _Latin1Iterator
   final IndexedIterator<int> delegate;
   final _Latin1String iterable;
 
-  bool reachedEof = false;
+  bool _eof = false;
 
   _Latin1Iterator(final _Latin1String str) :
     this.delegate = new IndexedIterator.list(str._bytes),
@@ -44,20 +44,22 @@ class _Latin1Iterator
     return retval;
   }
 
+  bool get eof => _eof;
+
   void set index(final int index) {
     super.index = index;
     if (index < delegate.iterable.length) {
-      reachedEof = false;
+      _eof = false;
     }
   }
 
   bool moveNext() {
-    if (reachedEof) {
+    if (eof) {
       return false;
     }
 
-    if (!reachedEof && !super.moveNext()) {
-      reachedEof = true;
+    if (!eof && !super.moveNext()) {
+      _eof = true;
       return false;
     }
 
@@ -65,7 +67,7 @@ class _Latin1Iterator
   }
 
   bool movePrevious() {
-    reachedEof = false;
+    _eof = false;
     return super.movePrevious();
   }
 }

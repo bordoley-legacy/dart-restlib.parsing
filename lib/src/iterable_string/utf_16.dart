@@ -3,7 +3,7 @@ part of parsing;
 class _Utf16String extends IterableBase<int> implements IterableString {
   final String _string;
 
-  const _Utf16String._internal(this._string);
+  const _Utf16String(this._string);
 
   bool get isEmpty =>
       _string.isEmpty;
@@ -38,7 +38,7 @@ class _Utf16Iterator implements CodePointIterator {
   int _index = -1;
   final IterableString iterable;
 
-  bool reachedEof = false;
+  bool _eof = false;
 
   _Utf16Iterator(this.iterable);
 
@@ -60,6 +60,8 @@ class _Utf16Iterator implements CodePointIterator {
         string.substring(index, index + 1);
   }*/
 
+  bool get eof => _eof;
+
   int get index => _index;
 
   void set index(final int index) {
@@ -73,25 +75,25 @@ class _Utf16Iterator implements CodePointIterator {
     _updateCurrent();
 
     if (index < iterable.length) {
-      reachedEof = false;
+      _eof = false;
     }
 
   }
 
   bool moveNext() {
-    if (reachedEof) {
+    if (eof) {
       return false;
     }
 
     _moveIndexToNextCodePointIndex();
     _updateCurrent();
-    reachedEof = (index == iterable.toString().length);
-    return !reachedEof;
+    _eof = (index == iterable.toString().length);
+    return !eof;
 
   }
 
   bool movePrevious() {
-    reachedEof = false;
+    _eof = false;
 
     if (index > -1) {
       _moveIndexToPreviousCodePointIndex();

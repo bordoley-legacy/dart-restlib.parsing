@@ -38,19 +38,19 @@ part "src/parsers/string_parser.dart";
 
 // See http://tools.ietf.org/html/rfc5234#appendix-B.1
 
-final RuneMatcher ALPHA = inRange('a', 'z') | inRange('A', 'Z');
+const RuneMatcher ALPHA = const _OrRuneMatcher(const _InRangeRuneMatcher(97, 122), const _InRangeRuneMatcher(65, 90));
 
-final RuneMatcher ALPHA_NUMERIC = ALPHA | NUMERIC;
+const RuneMatcher ALPHA_NUMERIC = const _OrRuneMatcher(ALPHA, NUMERIC);
 
-final RuneMatcher AMPERSAND = const _SingleRuneMatcher(38);
+const RuneMatcher AMPERSAND = const _SingleRuneMatcher(38);
 
 const RuneMatcher ANY = const _AnyRuneMatcher();
 
 const RuneMatcher ASTERISK = const _SingleRuneMatcher(42);
 
-final RuneMatcher BIT = anyOf("01");
+const RuneMatcher BIT = const _InRangeRuneMatcher(48, 49);
 
-final RuneMatcher CHAR = inRange("\u0001", "\u007F");
+const RuneMatcher CHAR = const _InRangeRuneMatcher(1,127);
 
 const RuneMatcher CLOSE_PARENTHESES = const _SingleRuneMatcher(41);
 
@@ -60,9 +60,9 @@ const RuneMatcher COMMA = const _SingleRuneMatcher(44);
 
 const RuneMatcher CR = const _SingleRuneMatcher(13);
 
-final Parser<String> CRLF = string("\r\n");
+const Parser<String> CRLF = const _StringParser(const _Utf16String("\r\n"), const Option.constant("\r\n"));
 
-final RuneMatcher CTL = inRange("\u0000", "\u001F") | isChar("\u007F");
+const RuneMatcher CTL = const _OrRuneMatcher(const _InRangeRuneMatcher(0, 0x1F), const _SingleRuneMatcher(0x7F));
 
 final Parser<int> DIGIT = NUMERIC.map((final int rune) =>
     rune - 48);
@@ -82,7 +82,7 @@ const RuneMatcher DQUOTE = const _SingleRuneMatcher(34);
 
 const RuneMatcher FORWARD_SLASH = const _SingleRuneMatcher(47);
 
-final RuneMatcher HEXDIG = NUMERIC | anyOf("ABCDEF");
+const RuneMatcher HEXDIG = const _OrRuneMatcher(NUMERIC, const _InRangeRuneMatcher(65, 70));
 
 const RuneMatcher HTAB = const _SingleRuneMatcher(9);
 
@@ -92,9 +92,9 @@ const RuneMatcher LF = const _SingleRuneMatcher(10);
 
 const RuneMatcher NONE = const _NoneRuneMatcher();
 
-final RuneMatcher NUMERIC = inRange("0", "9");
+const RuneMatcher NUMERIC = const _InRangeRuneMatcher(48, 57);
 
-final RuneMatcher OCTET = inRange("\u0000", "\u00FF");
+const RuneMatcher OCTET = const _InRangeRuneMatcher(0, 0xFF);
 
 const RuneMatcher OPEN_PARENTHESES = const _SingleRuneMatcher(40);
 
@@ -108,7 +108,7 @@ const RuneMatcher SEMICOLON = const _SingleRuneMatcher(59);
 
 const RuneMatcher SP = const _SingleRuneMatcher(32);
 
-final RuneMatcher VCHAR = inRange("\u0021", "\u007E");
+const RuneMatcher VCHAR = const _InRangeRuneMatcher(0x21, 0x7E);
 
 final RuneMatcher WSP = anyOf(" \t");
 

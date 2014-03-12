@@ -29,8 +29,9 @@ class _AsciiIterator
     implements CodePointIterator {
   final IndexedIterator<int> delegate;
   final _AsciiString iterable;
+  bool _eof = false;
 
-  bool reachedEof = false;
+
 
   _AsciiIterator(final _AsciiString str) :
     this.delegate = new IndexedIterator.list(str._bytes),
@@ -43,20 +44,22 @@ class _AsciiIterator
     return retval;
   }
 
+  bool get eof => _eof;
+
   void set index(final int index) {
     super.index = index;
     if (index < delegate.iterable.length) {
-      reachedEof = false;
+      _eof = false;
     }
   }
 
   bool moveNext() {
-    if (reachedEof) {
+    if (eof) {
       return false;
     }
 
-    if (!reachedEof && !super.moveNext()) {
-      reachedEof = true;
+    if (!eof && !super.moveNext()) {
+      _eof = true;
       return false;
     }
 
@@ -64,7 +67,7 @@ class _AsciiIterator
   }
 
   bool movePrevious() {
-    reachedEof = false;
+    _eof = false;
     return super.movePrevious();
   }
 }
