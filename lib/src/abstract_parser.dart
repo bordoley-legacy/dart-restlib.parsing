@@ -24,7 +24,7 @@ abstract class AbstractParser<T> implements Parser<T> {
       new _ManyParser(this);
 
   Parser<Iterable<T>> many1() =>
-      many().map((final Iterable e) =>
+      many().map((final Iterable<T> e) =>
           e.isEmpty ? null : e);
 
   Parser map(dynamic f(T value)) =>
@@ -62,17 +62,16 @@ abstract class AbstractParser<T> implements Parser<T> {
           throw new ArgumentError("Failed to parse $str")).first;
 
   Parser<Iterable<T>> sepBy(final Parser delim) {
+    final Parser safeDelim = delim.flatMap((_) => const Option.constant(""));
     final Parser<T> safeParser = this.map((final T value) => value);
     final Parser<Iterable<T>> additional =
-        (delim + safeParser)
-          .map((final Iterable e) =>
-              e.last) // Make sure its the last elements since delim can be a list parser
+        (safeDelim + safeParser)
+          .map((final Pair<dynamic, T> e) => e.e1)
           .many();
 
     return (safeParser + additional)
-              .map((final Iterable e) =>
-                  // FIXME: PersistentList should support push since it implements Stack
-                  [e.elementAt(0)]..addAll(e.elementAt(1)));
+              .map((final Pair<T, Iterable<T>> e) =>
+                  EMPTY_SEQUENCE.add(e.e0).addAll(e.e1));
   }
 
   Parser<Iterable<T>> sepBy1(final Parser delim) =>
