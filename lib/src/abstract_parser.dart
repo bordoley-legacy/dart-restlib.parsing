@@ -39,8 +39,7 @@ abstract class AbstractParser<T> implements Parser<T> {
 
   Option<T> parse(final String str) =>
       (this + EOF)
-        .map((final Iterable e) =>
-          e.first)
+        .map((final Pair<T, String> e) => e.e0)
         .parseFrom(new IterableString(str).iterator);
 
   Option<T> parseFrom(final CodePointIterator itr) {

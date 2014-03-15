@@ -42,13 +42,7 @@ class _Utf16Iterator implements CodePointIterator {
 
   _Utf16Iterator(this.iterable);
 
-  int get current {
-    if (_current == null) {
-      throw new StateError("Index is out of bounds");
-    }
-
-    return _current;
-  }
+  int get current => _current;
 
   /*
   String get currentAsString {

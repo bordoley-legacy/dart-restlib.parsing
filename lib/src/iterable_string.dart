@@ -1,7 +1,10 @@
 part of parsing;
 
 abstract class IterableString implements Iterable<int> {
+  static const IterableString EMPTY_UTF_8 = null;
   static const IterableString EMPTY_UTF_16 = const _Utf16String("");
+  static const IterableString EMPTY_UTF_16BE = null;
+  static const IterableString EMPTY_UTF_16LE = null;
   static const IterableString EMPTY_ASCII = const _AsciiString(EMPTY_LIST);
   static const IterableString EMPTY_LATIN1 = const _Latin1String(EMPTY_LIST);
 
@@ -15,6 +18,12 @@ abstract class IterableString implements Iterable<int> {
       checkNotNull(bytes).isEmpty ? EMPTY_LATIN1 : new _Latin1String(bytes);
 
   factory IterableString.utf8(final List<int> bytes) =>
+        null;
+
+  factory IterableString.utf16BE(final List<int> bytes) =>
+        null;
+
+  factory IterableString.utf8LE(final List<int> bytes) =>
         null;
 
   CodePointIterator get iterator;

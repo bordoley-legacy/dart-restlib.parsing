@@ -31,8 +31,6 @@ class _AsciiIterator
   final _AsciiString iterable;
   bool _eof = false;
 
-
-
   _AsciiIterator(final _AsciiString str) :
     this.delegate = new IndexedIterator.list(str._bytes),
     this.iterable = str;
