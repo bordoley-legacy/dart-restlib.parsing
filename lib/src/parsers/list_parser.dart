@@ -17,7 +17,7 @@ class _ListParser extends AbstractParser<Tuple> implements Parser<Tuple> {
     ImmutableSequence tokens = EMPTY_SEQUENCE;
 
     for(final Parser p in _parsers) {
-      final Option parseResult = p.parseFrom(itr);
+      final Option parseResult = p.parseFrom(itr).left;
       if (parseResult.isEmpty) {
         return Option.NONE;
       } else {

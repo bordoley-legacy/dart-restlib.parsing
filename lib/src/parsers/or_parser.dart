@@ -1,12 +1,13 @@
 part of parsing;
 
 class _OrParser<T> extends AbstractParser<T> {
-  final _EitherParser<T,T> delegate;
+  final Parser<T> fst;
+  final Parser<T> snd;
 
-  _OrParser(Parser<T> fst, Parser<T> snd):
-    delegate = fst ^ snd;
+  const _OrParser(this.fst, this.snd);
 
   Option<T> doParse(final CodePointIterator itr) =>
-      delegate.parseFrom(itr).map((final Either<T,T> either) =>
-          either.value);
+      fst.parseFrom(itr).fold(
+          (final T result) => new Option(result),
+          (final ParseError error) => snd.parseFrom(itr).left);
 }

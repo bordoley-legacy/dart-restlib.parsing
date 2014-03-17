@@ -37,28 +37,24 @@ abstract class AbstractParser<T> implements Parser<T> {
     optional().map((final Option<T> opt) =>
         opt.orElse(alternative));
 
-  Option<T> parse(final String str) =>
+  Either<T, ParseError> parse(final String str) =>
       (this + EOF)
         .map((final Pair<T, String> e) => e.e0)
         .parseFrom(new IterableString(str).iterator);
 
-  Option<T> parseFrom(final CodePointIterator itr) {
+  Either<T, ParseError> parseFrom(final CodePointIterator itr) {
     final int startIndex = itr.index;
-    final Option<T> token = doParse(itr);
-
-    if (!itr.moveNext()) {
-      return Option.NONE;
-    }
-
-    itr.movePrevious();
-    if (token.isEmpty) {
-      itr.index = startIndex;
-    }
-    return token;
+    return doParse(itr)
+        .map((final T result) => new Either.leftValue(result))
+        .orCompute(() {
+          final Either<T, ParseError> result = new Either.rightValue(new ParseError(itr.index));
+          itr.index = startIndex;
+          return result;
+        });
   }
 
   T parseValue(final String str) =>
-      computeIfEmpty(parse(str), () =>
+      computeIfEmpty(parse(str).left, () =>
           throw new ArgumentError("Failed to parse $str")).first;
 
   Parser<Iterable<T>> sepBy(final Parser delim) {

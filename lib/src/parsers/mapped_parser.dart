@@ -12,7 +12,7 @@ class _MappedParser<T> extends AbstractParser<T> {
     this.f = f;
 
   Option<T> doParse(final CodePointIterator itr) =>
-    delegate.parseFrom(itr).map(f);
+    delegate.parseFrom(itr).left.map(f);
 
   String toString() =>
       "Mapped($delegate)";
@@ -27,7 +27,7 @@ class _FlatMappedParser<T> extends AbstractParser<T> {
     this.f = f;
 
   Option<T> doParse(final CodePointIterator itr) =>
-    delegate.parseFrom(itr).flatMap(f);
+    delegate.parseFrom(itr).left.flatMap(f);
 
   String toString() =>
       "FlatMapped($delegate)";

@@ -9,7 +9,7 @@ class _ManyParser<T> extends AbstractParser<Iterable<T>> {
     ImmutableSequence<T> retval = EMPTY_SEQUENCE;
 
     Option<T> t = Option.NONE;
-    while ((t = delegate.parseFrom(itr)).isNotEmpty) {
+    while ((t = delegate.parseFrom(itr).left).isNotEmpty) {
       retval = retval.add(t.value);
     }
 
