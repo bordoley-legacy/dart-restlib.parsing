@@ -110,7 +110,7 @@ const RuneMatcher SP = const _SingleRuneMatcher(32);
 
 const RuneMatcher VCHAR = const _InRangeRuneMatcher(0x21, 0x7E);
 
-final RuneMatcher WSP = anyOf(" \t");
+const RuneMatcher WSP = const _OrRuneMatcher(SP, HTAB);
 
 RuneMatcher anyOf(final String runes) =>
     (runes.length == 0) ? NONE : new _AnyOfRuneMatcher(runes);
