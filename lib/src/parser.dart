@@ -37,13 +37,13 @@ abstract class Parser<T> {
 abstract class ParseError {
   factory ParseError(int errorPosition) {
     checkArgument(errorPosition > -1);
-    return new ParseError(errorPosition);
+    return new _ParseError(errorPosition);
   }
 
   int get errorPosition;
 }
 
-class _ParseError {
+class _ParseError implements ParseError {
   final int errorPosition;
 
   _ParseError(this.errorPosition);
