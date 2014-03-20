@@ -9,5 +9,5 @@ class _OrParser<T> extends AbstractParser<T> {
   Option<T> doParse(final CodePointIterator itr) =>
       fst.parseFrom(itr).fold(
           (final T result) => new Option(result),
-          (final ParseError error) => snd.parseFrom(itr).left);
+          (final ParseException error) => snd.parseFrom(itr).left);
 }

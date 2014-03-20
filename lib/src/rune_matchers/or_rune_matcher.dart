@@ -1,14 +1,14 @@
 part of parsing;
 
 class _OrRuneMatcher extends _AbstractRuneMatcher {
-  final RuneMatcher fst;
-  final RuneMatcher snd;
+  final Iterable<RuneMatcher> matchers;
 
-  const _OrRuneMatcher(this.fst, this.snd) : super();
+  const _OrRuneMatcher(this.matchers) : super();
 
   bool matches(final int rune) =>
-      fst.matches(rune) || snd.matches(rune);
+      matchers.any((final RuneMatcher matcher) =>
+          matcher.matches(rune));
 
   String toString() =>
-      "($fst | $snd)";
+      "(" + matchers.join(" | ") + ")";
 }

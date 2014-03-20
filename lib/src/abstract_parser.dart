@@ -37,17 +37,17 @@ abstract class AbstractParser<T> implements Parser<T> {
     optional().map((final Option<T> opt) =>
         opt.orElse(alternative));
 
-  Either<T, ParseError> parse(final String str) =>
+  Either<T, ParseException> parse(final String str) =>
       (this + EOF)
         .map((final Pair<T, String> e) => e.e0)
         .parseFrom(new IterableString(str).iterator);
 
-  Either<T, ParseError> parseFrom(final CodePointIterator itr) {
+  Either<T, ParseException> parseFrom(final CodePointIterator itr) {
     final int startIndex = itr.index;
     return doParse(itr)
         .map((final T result) => new Either.leftValue(result))
         .orCompute(() {
-          final Either<T, ParseError> result = new Either.rightValue(new ParseError(itr.index));
+          final Either<T, ParseException> result = new Either.rightValue(new ParseException(itr.index));
           itr.index = startIndex;
           return result;
         });

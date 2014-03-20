@@ -16,8 +16,6 @@ abstract class RuneMatcher implements Parser<int> {
    */
   RuneMatcher operator|(final RuneMatcher other);
 
-  Option<int> doParse(final CodePointIterator itr);
-
   Parser<IterableString> many();
 
   Parser<IterableString> many1();

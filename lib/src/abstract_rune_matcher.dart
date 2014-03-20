@@ -7,7 +7,7 @@ abstract class _AbstractRuneMatcher extends AbstractParser<int> implements RuneM
       new _AndRuneMatcher(this, other);
 
   RuneMatcher operator|(final RuneMatcher other) =>
-      new _OrRuneMatcher(this, other);
+      new _OrRuneMatcher([this, other]);
 
   Option<int> doParse(final CodePointIterator itr) =>
       (itr.moveNext() && matches(itr.current)) ?

@@ -23,28 +23,19 @@ abstract class Parser<T> {
 
   Parser<T> orElse(T alternative);
 
-  Either<T, ParseError> parse(String str);
+  Either<T, ParseException> parse(String str);
 
   T parseValue(String str);
 
-  Either<T, ParseError> parseFrom(CodePointIterator itr);
+  Either<T, ParseException> parseFrom(CodePointIterator itr);
 
   Parser<Iterable<T>> sepBy(Parser delim);
 
   Parser<Iterable<T>> sepBy1(Parser delim);
 }
 
-abstract class ParseError {
-  factory ParseError(int errorPosition) {
-    checkArgument(errorPosition > -1);
-    return new _ParseError(errorPosition);
-  }
-
-  int get errorPosition;
-}
-
-class _ParseError implements ParseError {
+class ParseException {
   final int errorPosition;
 
-  _ParseError(this.errorPosition);
+  ParseException(this.errorPosition);
 }

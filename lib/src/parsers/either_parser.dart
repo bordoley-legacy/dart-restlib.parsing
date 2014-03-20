@@ -10,10 +10,10 @@ class _EitherParser<T1, T2> extends AbstractParser<Either<T1, T2>> {
       fst.parseFrom(itr)
         .fold((final T1 result) =>
                   new Option(new Either.leftValue(result)),
-              (final ParseError error) =>
+              (final ParseException error) =>
                   snd.parseFrom(itr).fold(
                       (final T2 result) => new Option(new Either.rightValue(result)),
-                      (final ParseError error) => Option.NONE));
+                      (final ParseException error) => Option.NONE));
 
   String toString() =>
       "($fst | $snd)";
