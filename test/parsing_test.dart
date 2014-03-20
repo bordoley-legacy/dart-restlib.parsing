@@ -130,8 +130,6 @@ void constantTests() {
 
   testParser("INTEGER", INTEGER, ["1234789", "1", "11"], [" 1234789", "a1", "A11"]);
 
-  // FIXME: INTEGER parser test
-
   testSingleAsciiRuneMatcher("LF", LF, toCp("\n"));
 
   testRuneMatcher("NONE", NONE, [], unicode);
