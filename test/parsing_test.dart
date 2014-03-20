@@ -5,13 +5,24 @@ import "package:restlib_parsing/parsing.dart";
 import "package:unittest/unittest.dart";
 
 testRuneMatcher(final String name, final RuneMatcher matcher, final Iterable<int> matches, final Iterable<int> noMatch) {
-  group(name, () {
+  group("RuneMatcher: $name", () {
     test("matches", () =>
         matches.forEach((final int i) =>
             expect(matcher.matches(i), isTrue, reason: "Failed for rune: $i")));
     test("does not match", () =>
         noMatch.forEach((final int i) =>
             expect(matcher.matches(i), isFalse, reason: "Failed for rune: $i")));
+  });
+}
+
+testParser(final String name, final Parser parser, final Iterable<String> matches, final Iterable<String> noMatch) {
+  group("Parser: $name", () {
+    test("parse with result", () =>
+        matches.forEach((final String str) =>
+            expect(parser.parse(str).left.isNotEmpty, isTrue, reason: "Failed on: $str")));
+    test("parse with error", () =>
+        noMatch.forEach((final String str) =>
+            expect(parser.parse(str).right.isNotEmpty, isTrue, reason: "Failed on: $str")));
   });
 }
 
@@ -87,7 +98,7 @@ void constantTests() {
 
   testSingleAsciiRuneMatcher("CR", CR, toCp("\r"));
 
-  // FIXME: CRLF parser test
+  testParser("CRLF", CRLF, ["\r\n"], ["\r", "\n", "\r\r\n", "\n\r", " \r\n"]);
 
   testRuneMatcher("CTL", CTL,
             concat([new Range.closed(0, 0x1F), new Range.single(0x7F)].map(rangeToSet)),
@@ -95,9 +106,11 @@ void constantTests() {
                     new Range.openClosed(0x7F, 255),
                     new Range.closed(65000, 80000)].map(rangeToSet)));
 
-  // FIXME: DIGIT parser test
+  testParser("DIGIT", DIGIT,
+      ["0", "1", "2", "3" , "4", "5", "6", "7", "8", "9"],
+      [" 0", " 1", " 2", " 3" , " 4", " 5", " 6", " 7", " 8", " 9", " 11", "a", "afjdsklfj"]);
 
-  // FIXME: EOF parser test
+  testParser("EOF", EOF, [""], [" ", "a", "abc", " abc"]);
 
   testSingleAsciiRuneMatcher("EQUALS", EQUALS, toCp("="));
 
@@ -114,6 +127,8 @@ void constantTests() {
                     new Range.openClosed(toCp("F"), 255)].map(rangeToSet)));
 
   testSingleAsciiRuneMatcher("HTAB", HTAB, toCp("\t"));
+
+  testParser("INTEGER", INTEGER, ["1234789", "1", "11"], [" 1234789", "a1", "A11"]);
 
   // FIXME: INTEGER parser test
 
