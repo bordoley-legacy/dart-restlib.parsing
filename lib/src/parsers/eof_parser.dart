@@ -1,12 +1,12 @@
 part of parsing;
 
-class _EofParser extends AbstractParser<String> {
-  static const EMPTY_STRING_OPTION = const Option.constant("");
+class _EofParser extends ParserBase<String> {
+  static const Left<String> RETVAL = const Either.leftConstant(const Option.constant(""));
 
   const _EofParser();
 
-  Option<String> doParse(final CodePointIterator itr) =>
-      itr.moveNext() ? Option.NONE : EMPTY_STRING_OPTION;
+  Either<String, ParseException> parseFrom(final CodePointIterator itr) =>
+      itr.moveNext() ? new Either.rightValue(new ParseException(itr.index)) : RETVAL;
 
   String toString() =>
       "EOF";

@@ -1,11 +1,11 @@
 part of parsing;
 
-class _ManyRuneParser extends AbstractParser<IterableString> {
+class _ManyRuneParser extends ParserBase<IterableString> {
   final RuneMatcher matcher;
 
   const _ManyRuneParser(this.matcher);
 
-  Option<IterableString> doParse(final CodePointIterator itr) {
+  Either<IterableString, ParseException> parseFrom(final CodePointIterator itr) {
     final int startIndex = itr.index;
 
     while(itr.moveNext() && matcher.matches(itr.current));
@@ -14,7 +14,7 @@ class _ManyRuneParser extends AbstractParser<IterableString> {
 
     itr.movePrevious();
 
-    return new Option(result);
+    return new Either.leftValue(result);
   }
 
   String toString() =>

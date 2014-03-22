@@ -1,12 +1,12 @@
 part of parsing;
 
-class _RecurseParser<T> extends AbstractParser<T> {
-  final delegate;
+class _RecurseParser<T> extends ParserBase<T> {
+  final Function delegate;
 
   _RecurseParser(Parser<T> delegate()) :
     this.delegate = delegate;
 
-  Option<T> doParse(final CodePointIterator itr) =>
+  Either<T, ParseException> parseFrom(final CodePointIterator itr) =>
       delegate().parseFrom(itr);
 
   String toString() =>

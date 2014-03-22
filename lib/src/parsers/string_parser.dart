@@ -1,21 +1,21 @@
 part of parsing;
 
-class _StringParser extends AbstractParser<String> {
+class _StringParser extends ParserBase<String> {
   final IterableString str;
-  final Option<String> retval;
+  final Left<String> retval;
 
   const _StringParser(this.str, this.retval);
 
-  Option<String> doParse(final CodePointIterator itr) {
+  Either<String, ParseException> parseFrom(final CodePointIterator itr) {
     final CodePointIterator ref = str.iterator;
 
     while(ref.moveNext()) {
       if (!itr.moveNext()) {
-        return Option.NONE;
+        return new Either.rightValue(new ParseException(itr.index));
       }
 
       if (itr.current != ref.current) {
-        return Option.NONE;
+        return new Either.rightValue(new ParseException(itr.index));
       }
     }
     return retval;

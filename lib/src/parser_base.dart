@@ -1,24 +1,22 @@
 part of parsing;
 
-abstract class AbstractParser<T> implements Parser<T> {
-  const AbstractParser();
+abstract class ParserBase<T> implements Parser<T> {
+  const ParserBase();
 
   Parser<Tuple> operator+(final Parser other) =>
-      new _ListParser.concat(this, other);
+      new _TupleParser(this, other);
 
   Parser<Either<T,dynamic>> operator^(final Parser other) =>
       new _EitherParser(this, other);
 
   Parser<T> operator|(final Parser<T> other) =>
-      new _OrParser(this, other);
+      new _OrParser([this, other]);
 
   Parser flatMap(Option f(T value)) =>
       new _FlatMappedParser(this, f);
 
   Parser<T> followedBy(final Parser p) =>
       new _FollowedByParser(this, p);
-
-  Option<T> doParse(CodePointIterator itr);
 
   Parser<Iterable<T>> many() =>
       new _ManyParser(this);
@@ -42,16 +40,7 @@ abstract class AbstractParser<T> implements Parser<T> {
         .map((final Pair<T, String> e) => e.e0)
         .parseFrom(new IterableString(str).iterator);
 
-  Either<T, ParseException> parseFrom(final CodePointIterator itr) {
-    final int startIndex = itr.index;
-    return doParse(itr)
-        .map((final T result) => new Either.leftValue(result))
-        .orCompute(() {
-          final Either<T, ParseException> result = new Either.rightValue(new ParseException(itr.index));
-          itr.index = startIndex;
-          return result;
-        });
-  }
+  Either<T, ParseException> parseFrom(final CodePointIterator itr);
 
   T parseValue(final String str) =>
       computeIfEmpty(parse(str).left, () =>

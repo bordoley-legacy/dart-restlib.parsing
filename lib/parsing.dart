@@ -6,6 +6,7 @@ import "dart:convert";
 import "package:restlib_common/collections.dart";
 import "package:restlib_common/collections.forwarding.dart";
 import "package:restlib_common/collections.immutable.dart";
+import "package:restlib_common/collections.mutable.dart";
 import "package:restlib_common/preconditions.dart";
 
 part "src/iterable_string/ascii.dart";
@@ -14,13 +15,13 @@ part "src/iterable_string/utf_16.dart";
 part "src/parsers/either_parser.dart";
 part "src/parsers/eof_parser.dart";
 part "src/parsers/followedby_parser.dart";
-part "src/parsers/list_parser.dart";
 part "src/parsers/many_parser.dart";
 part "src/parsers/many_rune_parser.dart";
 part "src/parsers/mapped_parser.dart";
 part "src/parsers/optional_parser.dart";
 part "src/parsers/or_parser.dart";
 part "src/parsers/recurse_parser.dart";
+part "src/parsers/tuple_parser.dart";
 part "src/rune_matchers/and_rune_matcher.dart";
 part "src/rune_matchers/any_rune_matcher.dart";
 part "src/rune_matchers/any_of_rune_matcher.dart";
@@ -29,10 +30,10 @@ part "src/rune_matchers/negate_rune_matcher.dart";
 part "src/rune_matchers/none_rune_matcher.dart";
 part "src/rune_matchers/or_rune_matcher.dart";
 part "src/rune_matchers/single_rune_matcher.dart";
-part "src/abstract_parser.dart";
 part "src/abstract_rune_matcher.dart";
 part "src/iterable_string.dart";
 part "src/parser.dart";
+part "src/parser_base.dart";
 part "src/rune_matcher.dart";
 part "src/parsers/string_parser.dart";
 
@@ -60,7 +61,7 @@ const RuneMatcher COMMA = const _SingleRuneMatcher(44);
 
 const RuneMatcher CR = const _SingleRuneMatcher(13);
 
-const Parser<String> CRLF = const _StringParser(const _Utf16String("\r\n"), const Option.constant("\r\n"));
+const Parser<String> CRLF = const _StringParser(const _Utf16String("\r\n"), const Either.leftConstant(const Option.constant("\r\n")));
 
 const RuneMatcher CTL = const _OrRuneMatcher(const[const _InRangeRuneMatcher(0, 0x1F), const _SingleRuneMatcher(0x7F)]);
 
@@ -140,4 +141,4 @@ Parser rec(Parser parser()) =>
     new _RecurseParser(parser);
 
 Parser<String> string(final String string) =>
-    new _StringParser(new IterableString(string), new Option(string));
+    new _StringParser(new IterableString(string), new Either.leftValue(new Option(string)));

@@ -1,13 +1,21 @@
 part of parsing;
 
-class _OrParser<T> extends AbstractParser<T> {
-  final Parser<T> fst;
-  final Parser<T> snd;
+class _OrParser<T> extends ParserBase<T> {
+  final Iterable<Parser<T>> parsers;
 
-  const _OrParser(this.fst, this.snd);
+  const _OrParser(this.parsers);
 
-  Option<T> doParse(final CodePointIterator itr) =>
-      fst.parseFrom(itr).fold(
-          (final T result) => new Option(result),
-          (final ParseException error) => snd.parseFrom(itr).left);
+  Either<T, ParseException> parseFrom(final CodePointIterator itr) {
+    final int startIndex = itr.index;
+
+    for (final Parser p in parsers) {
+      itr.index = startIndex;
+      final Either<T, ParseException> result = p.parseFrom(itr);
+      if (result is Left) {
+        return result;
+      }
+    }
+
+    return new Either.rightValue(new ParseException(itr.index));
+  }
 }

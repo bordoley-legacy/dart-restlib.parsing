@@ -4,6 +4,8 @@ import "package:restlib_common/collections.dart";
 import "package:restlib_parsing/parsing.dart";
 import "package:unittest/unittest.dart";
 
+part "src/abstract_rune_matcher_test.dart";
+
 testRuneMatcher(final String name, final RuneMatcher matcher, final Iterable<int> matches, final Iterable<int> noMatch) {
   group("RuneMatcher: $name", () {
     test("matches", () =>
