@@ -23,7 +23,7 @@ abstract class IterableString implements Iterable<int> {
   factory IterableString.utf16BE(final List<int> bytes) =>
         null;
 
-  factory IterableString.utf8LE(final List<int> bytes) =>
+  factory IterableString.utf16LE(final List<int> bytes) =>
         null;
 
   CodePointIterator get iterator;
