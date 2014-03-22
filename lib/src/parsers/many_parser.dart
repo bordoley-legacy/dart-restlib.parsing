@@ -20,7 +20,7 @@ class _ManyParser<T> extends ParserBase<Iterable<T>> {
       retval = retval.add(result.value);
     }
 
-    return new Either.left(retval);
+    return new Either.leftValue(retval);
   }
 
   String toString() =>
