@@ -34,7 +34,7 @@ abstract class Parser<T> {
   Parser<Iterable<T>> sepBy1(Parser delim);
 }
 
-class ParseException implements Exception {
+class ParseException extends FormatException {
   final int errorPosition;
 
   ParseException(this.errorPosition);
