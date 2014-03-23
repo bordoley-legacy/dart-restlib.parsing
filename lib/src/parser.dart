@@ -38,10 +38,15 @@ abstract class ParseResult<T> implements Either<T, FormatException> {
   factory ParseResult.success(final T result, final IterableString next) =>
       new _ParseSuccess(new Either.leftValue(checkNotNull(result)), checkNotNull(next));
 
-  factory ParseResult.failure(final IterableString next) =>
+  factory ParseResult.failure(final IterableString next, [final String message = ""]) =>
       new _ParseFailure(
-          new Either.rightValue(new FormatException()),
+          new Either.rightValue(new FormatException(message)),
           checkNotNull(next));
+
+  factory ParseResult.eof(final IterableString next) =>
+      new _ParseFailure(
+                new Either.rightValue(new EndOfFileException()),
+                checkNotNull(next));
 
   IterableString get next;
 }
@@ -110,4 +115,8 @@ class _ParseFailure<T> implements ParseFailure<T> {
 
   String toString() =>
       delegate.toString();
+}
+
+class EndOfFileException extends FormatException {
+  EndOfFileException() : super("Reached EOF");
 }

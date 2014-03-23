@@ -13,7 +13,9 @@ class _FollowedByParser<T> extends ParserBase<T> {
           final ParseResult nextResult = next.parseFrom(parseResult.next);
           return nextResult.fold(
               (_) => parseResult,
-              (_) => new ParseResult.failure(str));
+              (final FormatException e) =>
+                  e is EndOfFileException ?
+                      new ParseResult.eof(str) : new ParseResult.failure(str));
         }, (_) => parseResult);
   }
 

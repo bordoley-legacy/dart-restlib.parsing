@@ -11,7 +11,7 @@ class _StringParser extends ParserBase<String> {
 
     while(ref.moveNext()) {
       if (!itr.moveNext()) {
-        return new ParseResult.failure(str);
+        return new ParseResult.eof(str);
       }
 
       if (itr.current != ref.current) {

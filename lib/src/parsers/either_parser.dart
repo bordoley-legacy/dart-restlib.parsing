@@ -17,7 +17,9 @@ class _EitherParser<T1, T2> extends ParserBase<Either<T1, T2>> {
       return new ParseResult.success(new Either.rightValue(sndResult.value), sndResult.next);
     }
 
-    return new ParseResult.failure(str);
+    return (fstResult.value is EndOfFileException ||
+        sndResult.value is EndOfFileException) ?
+            new ParseResult.eof(str) : new ParseResult.failure(str);
   }
 
   String toString() =>

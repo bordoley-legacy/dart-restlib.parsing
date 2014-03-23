@@ -20,7 +20,8 @@ class _TupleParser extends ParserBase<Tuple> implements Parser<Tuple> {
     for (final Parser p in _parsers) {
       final ParseResult result = p.parseFrom(next);
       if (result is ParseFailure) {
-        return new ParseResult.failure(str);
+        return result.value is EndOfFileException ?
+            new ParseResult.eof(str) : new ParseResult.failure(str);
       }
 
       tokens.add(result.value);
