@@ -35,10 +35,12 @@ abstract class ParserBase<T> implements Parser<T> {
     optional().map((final Option<T> opt) =>
         opt.orElse(alternative));
 
-  ParseResult<T> parse(final String str) =>
-      (this + EOF)
+  ParseResult<T> parse(final String str) {
+    final Parser<T> safeParser = this.map((final T result) => result);
+    return (safeParser + EOF)
         .map((final Pair<T, String> e) => e.e0)
         .parseFrom(new IterableString(str));
+  }
 
   ParseResult<T> parseFrom(IterableString str);
 

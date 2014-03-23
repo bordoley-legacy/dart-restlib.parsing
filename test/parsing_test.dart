@@ -5,6 +5,7 @@ import "package:restlib_parsing/parsing.dart";
 import "package:unittest/unittest.dart";
 
 part "src/abstract_rune_matcher_test.dart";
+part "src/parser_test.dart";
 
 testRuneMatcher(final String name, final RuneMatcher matcher, final Iterable<int> matches, final Iterable<int> noMatch) {
   group("RuneMatcher: $name", () {
@@ -17,14 +18,18 @@ testRuneMatcher(final String name, final RuneMatcher matcher, final Iterable<int
   });
 }
 
-testParser(final String name, final Parser parser, final Iterable<String> matches, final Iterable<String> noMatch) {
+testParser(final String name, final Parser parser, final Iterable<String> matches, final Iterable<String> noMatch, int matchLength) {
   group("Parser: $name", () {
     test("parse with result", () =>
-        matches.forEach((final String str) =>
-            expect(parser.parse(str).left.isNotEmpty, isTrue, reason: "Failed on: $str")));
+        matches.forEach((final String str) {
+          final IterableString itrStr = new IterableString(str);
+          final ParseResult result = parser.parseFrom(itrStr);
+          expect(result.left.isNotEmpty, isTrue, reason: "Failed on: $str");
+          expect(result.next.length, equals(itrStr.length - matchLength));
+        }));
     test("parse with error", () =>
         noMatch.forEach((final String str) =>
-            expect(parser.parse(str).right.isNotEmpty, isTrue, reason: "Failed on: $str")));
+            expect(parser.parseFrom(new IterableString(str)).right.isNotEmpty, isTrue, reason: "Failed on: $str")));
   });
 }
 
@@ -100,7 +105,7 @@ void constantTests() {
 
   testSingleAsciiRuneMatcher("CR", CR, toCp("\r"));
 
-  testParser("CRLF", CRLF, ["\r\n"], ["\r", "\n", "\r\r\n", "\n\r", " \r\n"]);
+  testParser("CRLF", CRLF, ["\r\n"], ["\r", "\n", "\r\r\n", "\n\r", " \r\n"], 2);
 
   testRuneMatcher("CTL", CTL,
             concat([new Range.closed(0, 0x1F), new Range.single(0x7F)].map(rangeToSet)),
@@ -110,9 +115,9 @@ void constantTests() {
 
   testParser("DIGIT", DIGIT,
       ["0", "1", "2", "3" , "4", "5", "6", "7", "8", "9"],
-      [" 0", " 1", " 2", " 3" , " 4", " 5", " 6", " 7", " 8", " 9", " 11", "a", "afjdsklfj"]);
+      [" 0", " 1", " 2", " 3" , " 4", " 5", " 6", " 7", " 8", " 9", " 11", "a", "afjdsklfj"], 1);
 
-  testParser("EOF", EOF, [""], [" ", "a", "abc", " abc"]);
+  testParser("EOF", EOF, [""], [" ", "a", "abc", " abc"], 0);
 
   testSingleAsciiRuneMatcher("EQUALS", EQUALS, toCp("="));
 
@@ -130,7 +135,7 @@ void constantTests() {
 
   testSingleAsciiRuneMatcher("HTAB", HTAB, toCp("\t"));
 
-  testParser("INTEGER", INTEGER, ["1234789", "1", "11"], [" 1234789", "a1", "A11"]);
+  testParser("INTEGER", INTEGER, ["1234", "4567", "8901"], [" 1234789", "a1", "A11"], 4);
 
   testSingleAsciiRuneMatcher("LF", LF, toCp("\n"));
 
@@ -174,6 +179,7 @@ void constantTests() {
 parsingTestGroups() {
   group("package:parsing", () {
     constantTests();
+    testParsers();
   });
 }
 

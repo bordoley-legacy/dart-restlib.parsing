@@ -56,6 +56,9 @@ class _ParseSuccess<T> implements ParseSuccess<T> {
 
   const _ParseSuccess(this.delegate, this.next);
 
+  int get hashCode =>
+      delegate.hashCode;
+
   Some<T> get left =>
       delegate.left;
 
@@ -65,11 +68,17 @@ class _ParseSuccess<T> implements ParseSuccess<T> {
   T get value =>
       delegate.value;
 
+  bool operator==(other) =>
+      delegate == other;
+
   dynamic fold(onLeft(T left), onRight(dynamic right)) =>
       delegate.fold(onLeft, onRight);
 
   Either<dynamic, T> swap() =>
       delegate.swap();
+
+  String toString() =>
+      delegate.toString();
 }
 
 class _ParseFailure implements ParseFailure {
@@ -77,6 +86,9 @@ class _ParseFailure implements ParseFailure {
   final IterableString next;
 
   _ParseFailure(this.delegate, this.next);
+
+  int get hashCode =>
+      delegate.hashCode;
 
   None get left =>
         delegate.left;
@@ -87,9 +99,15 @@ class _ParseFailure implements ParseFailure {
   FormatException get value =>
       delegate.value;
 
+  bool operator==(other) =>
+      delegate == other;
+
   dynamic fold(onLeft(dynamic left), onRight(FormatException right)) =>
       delegate.fold(onLeft, onRight);
 
   Either<FormatException, dynamic> swap() =>
       delegate.swap();
+
+  String toString() =>
+      delegate.toString();
 }
