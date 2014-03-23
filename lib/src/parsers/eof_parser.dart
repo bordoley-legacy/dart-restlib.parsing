@@ -1,12 +1,15 @@
 part of parsing;
 
-class _EofParser extends ParserBase<String> {
-  static const Left<String> RETVAL = const Either.leftConstant(const Option.constant(""));
+class _EofParser extends ParserBase {
+  static const ParseSuccess SUCCESS =
+      const _ParseSuccess(
+          const Either.leftConstant(const Option.constant("")),
+          IterableString.EMPTY_UTF_16);
 
   const _EofParser();
 
-  Either<String, ParseException> parseFrom(final CodePointIterator itr) =>
-      itr.moveNext() ? new Either.rightValue(new ParseException(itr.index)) : RETVAL;
+  ParseResult parseFrom(final IterableString str) =>
+      str.isEmpty ? SUCCESS : new ParseResult.failure(str);
 
   String toString() =>
       "EOF";

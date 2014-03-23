@@ -35,12 +35,12 @@ abstract class ParserBase<T> implements Parser<T> {
     optional().map((final Option<T> opt) =>
         opt.orElse(alternative));
 
-  Either<T, ParseException> parse(final String str) =>
+  ParseResult<T> parse(final String str) =>
       (this + EOF)
         .map((final Pair<T, String> e) => e.e0)
-        .parseFrom(new IterableString(str).iterator);
+        .parseFrom(new IterableString(str));
 
-  Either<T, ParseException> parseFrom(final CodePointIterator itr);
+  ParseResult<T> parseFrom(IterableString str);
 
   T parseValue(final String str) =>
       computeIfEmpty(parse(str).left, () =>

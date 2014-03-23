@@ -11,17 +11,16 @@ class _MappedParser<T> extends ParserBase<T> {
     this.delegate = delegate,
     this.f = f;
 
-  Option<T> doParse(final CodePointIterator itr) =>
-    delegate.parseFrom(itr).left.map(f);
+  ParseResult<T> parseFrom(final IterableString str) {
+    final ParseResult delegateResult = delegate.parseFrom(str);
 
-  Either<T, ParseException> parseFrom(final CodePointIterator itr) {
-    final int startIndex = itr.index;
-    final Option<T> result = delegate.parseFrom(itr).left.map(f);
-    if (result is Some) {
-      return new Either.leftConstant(result);
-    }
-
-    return new Either.rightValue(new ParseException(startIndex));
+    return (delegateResult is ParseFailure) ?
+        delegateResult :
+          delegateResult.left.map(f)
+            .map((final T result) =>
+                new ParseResult.success(result, delegateResult.next))
+            .orCompute(() =>
+                new ParseResult.failure(str));
   }
 
   String toString() =>
@@ -36,14 +35,16 @@ class _FlatMappedParser<T> extends ParserBase<T> {
     this.delegate = delegate,
     this.f = f;
 
-  Either<T, ParseException> parseFrom(final CodePointIterator itr) {
-    final int startIndex = itr.index;
-    final Option<T> result = delegate.parseFrom(itr).left.flatMap(f);
-    if (result is Some) {
-      return new Either.leftConstant(result);
-    }
+  ParseResult<T> parseFrom(final IterableString str) {
+    final ParseResult delegateResult = delegate.parseFrom(str);
 
-    return new Either.rightValue(new ParseException(startIndex));
+    return (delegateResult is ParseFailure) ?
+        delegateResult :
+          delegateResult.left.flatMap(f)
+            .map((final T result) =>
+                new ParseResult.success(result, delegateResult.next))
+            .orCompute(() =>
+                new ParseResult.failure(str));
   }
 
   String toString() =>

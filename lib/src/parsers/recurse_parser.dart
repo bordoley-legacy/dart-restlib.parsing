@@ -6,8 +6,8 @@ class _RecurseParser<T> extends ParserBase<T> {
   _RecurseParser(Parser<T> delegate()) :
     this.delegate = delegate;
 
-  Either<T, ParseException> parseFrom(final CodePointIterator itr) =>
-      delegate().parseFrom(itr);
+  ParseResult<T> parseFrom(final IterableString str) =>
+      delegate().parseFrom(str);
 
   String toString() =>
       "rec(${delegate()})";

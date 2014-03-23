@@ -14,17 +14,12 @@ abstract class _AbstractRuneMatcher extends ParserBase<int> implements RuneMatch
           new Option(itr.current) :
             Option.NONE;
 
-  Either<int, ParseException> parseFrom(final CodePointIterator itr) {
-    if (itr.moveNext()) {
-      if (matches(itr.current)) {
-        return new Either.leftValue(itr.current);
-      }
-
-      return new Either.rightValue(new ParseException(itr.index));
-    }
-
-    return new Either.rightValue(new ParseException(itr.index));
-  }
+  ParseResult<int> parseFrom(final IterableString str) =>
+      first(str)
+        .map((final int cp) =>
+            new ParseResult.success(cp, str.substring(1)))
+        .orCompute(() =>
+            new ParseResult.failure(str));
 
   Parser<IterableString> many() =>
       new _ManyRuneParser(this);

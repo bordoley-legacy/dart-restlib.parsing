@@ -5,22 +5,17 @@ class _ManyParser<T> extends ParserBase<Iterable<T>> {
 
   const _ManyParser(this.delegate);
 
-  Either<Iterable<T>, ParseException> parseFrom(final CodePointIterator itr) {
+  ParseResult<Iterable<T>> parseFrom(final IterableString str) {
     ImmutableSequence<T> retval = EMPTY_SEQUENCE;
+    IterableString next = str;
+    ParseResult<T> result;
 
-    while(true) {
-      final int startIndex = itr.index;
-      final Option<T> result = delegate.parseFrom(itr).left;
-
-      if (result is None) {
-        itr.index = startIndex;
-        break;
-      }
-
+    while((result = delegate.parseFrom(next)) is ParseSuccess) {
       retval = retval.add(result.value);
+      next = result.next;
     }
 
-    return new Either.leftValue(retval);
+    return new ParseResult.success(retval, result.next);
   }
 
   String toString() =>

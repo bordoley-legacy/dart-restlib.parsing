@@ -5,16 +5,11 @@ class _ManyRuneParser extends ParserBase<IterableString> {
 
   const _ManyRuneParser(this.matcher);
 
-  Either<IterableString, ParseException> parseFrom(final CodePointIterator itr) {
-    final int startIndex = itr.index;
-
+  ParseResult<IterableString> parseFrom(final IterableString str) {
+    final CodePointIterator itr = str.iterator;
     while(itr.moveNext() && matcher.matches(itr.current));
-    final int endIndex = itr.index;
-    final IterableString result = itr.iterable.substring(startIndex + 1, endIndex);
-
-    itr.movePrevious();
-
-    return new Either.leftValue(result);
+    final IterableString result = itr.iterable.substring(0, itr.index + 1);
+    return new ParseResult.success(result, str.substring(itr.index + 1));
   }
 
   String toString() =>

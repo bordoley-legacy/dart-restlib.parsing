@@ -13,20 +13,21 @@ class _TupleParser extends ParserBase<Tuple> implements Parser<Tuple> {
 
   const _TupleParser._(this._parsers);
 
-  Either<Tuple, ParseException> parseFrom(final CodePointIterator itr) {
+  ParseResult<Tuple> parseFrom(final IterableString str) {
     final MutableSequence tokens = new GrowableSequence();
 
-    for(final Parser p in _parsers) {
-      final Either<dynamic, ParseException> parseResult = p.parseFrom(itr);
-
-      if (parseResult is Right) {
-        return parseResult;
+    IterableString next = str;
+    for (final Parser p in _parsers) {
+      final ParseResult result = p.parseFrom(next);
+      if (result is ParseFailure) {
+        return new ParseResult.failure(str);
       }
 
-      tokens.add(parseResult.value);
+      tokens.add(result.value);
+      next = result.next;
     }
 
-    return new Either.leftValue(Tuple.create(tokens));
+    return new ParseResult.success(Tuple.create(tokens), next);
   }
 
   String toString() =>

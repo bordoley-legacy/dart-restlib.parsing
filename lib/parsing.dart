@@ -61,7 +61,7 @@ const RuneMatcher COMMA = const _SingleRuneMatcher(44);
 
 const RuneMatcher CR = const _SingleRuneMatcher(13);
 
-const Parser<String> CRLF = const _StringParser(const _Utf16String("\r\n"), const Either.leftConstant(const Option.constant("\r\n")));
+const Parser<String> CRLF = const _StringParser(const _Utf16String("\r\n"), "\r\n");
 
 const RuneMatcher CTL = const _OrRuneMatcher(const[const _InRangeRuneMatcher(0, 0x1F), const _SingleRuneMatcher(0x7F)]);
 
@@ -141,4 +141,4 @@ Parser rec(Parser parser()) =>
     new _RecurseParser(parser);
 
 Parser<String> string(final String string) =>
-    new _StringParser(new IterableString(string), new Either.leftValue(new Option(string)));
+    new _StringParser(new IterableString(string), string);

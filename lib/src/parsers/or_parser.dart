@@ -5,17 +5,14 @@ class _OrParser<T> extends ParserBase<T> {
 
   const _OrParser(this.parsers);
 
-  Either<T, ParseException> parseFrom(final CodePointIterator itr) {
-    final int startIndex = itr.index;
-
+  ParseResult<T> parseFrom(final IterableString str) {
     for (final Parser p in parsers) {
-      itr.index = startIndex;
-      final Either<T, ParseException> result = p.parseFrom(itr);
-      if (result is Left) {
+      final ParseResult result = p.parseFrom(str);
+      if (result is ParseSuccess) {
         return result;
       }
     }
 
-    return new Either.rightValue(new ParseException(itr.index));
+    return new ParseResult.failure(str);
   }
 }

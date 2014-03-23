@@ -6,17 +6,14 @@ class _FollowedByParser<T> extends ParserBase<T> {
 
   const _FollowedByParser(this.parser, this.next);
 
-  Either<T, ParseException> parseFrom(final CodePointIterator itr) {
-    final Either<T, ParseException> parseResult = parser.parseFrom(itr);
+  ParseResult parseFrom(final IterableString str) {
+    final ParseResult<T> parseResult = parser.parseFrom(str);
     return parseResult.fold(
-        (_)  {
-          final int startPos = itr.index;
-          final Either<dynamic, ParseException> nextResult = next.parseFrom(itr);
+        (_) {
+          final ParseResult nextResult = next.parseFrom(parseResult.next);
           return nextResult.fold(
-              (_) {
-                itr.index = startPos;
-                return parseResult;
-              }, (_) => nextResult);
+              (_) => parseResult,
+              (_) => new ParseResult.failure(str));
         }, (_) => parseResult);
   }
 
