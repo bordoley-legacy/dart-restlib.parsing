@@ -17,7 +17,7 @@ abstract class _AbstractRuneMatcher extends ParserBase<int> implements RuneMatch
   ParseResult<int> parseFrom(final IterableString str) =>
       first(str)
         .map((final int cp) =>
-            new ParseResult.success(cp, str.substring(1)))
+            matches(cp) ? new ParseResult.success(cp, str.substring(1)) : null)
         .orCompute(() =>
             new ParseResult.failure(str));
 
