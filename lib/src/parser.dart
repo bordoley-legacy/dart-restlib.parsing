@@ -46,12 +46,12 @@ abstract class ParseResult<T> implements Either<T, FormatException> {
   IterableString get next;
 }
 
-abstract class ParseSuccess<T> implements Left<T>, ParseResult<T> {}
+abstract class ParseSuccess<T> implements Left<T,FormatException>, ParseResult<T> {}
 
-abstract class ParseFailure implements Right<FormatException>, ParseResult {}
+abstract class ParseFailure<T> implements Right<T,FormatException>, ParseResult<T> {}
 
 class _ParseSuccess<T> implements ParseSuccess<T> {
-  final Left<T> delegate;
+  final Left<T, FormatException> delegate;
   final IterableString next;
 
   const _ParseSuccess(this.delegate, this.next);
@@ -74,15 +74,15 @@ class _ParseSuccess<T> implements ParseSuccess<T> {
   dynamic fold(onLeft(T left), onRight(dynamic right)) =>
       delegate.fold(onLeft, onRight);
 
-  Either<dynamic, T> swap() =>
+  Either<FormatException, T> swap() =>
       delegate.swap();
 
   String toString() =>
       delegate.toString();
 }
 
-class _ParseFailure implements ParseFailure {
-  final Right<FormatException> delegate;
+class _ParseFailure<T> implements ParseFailure<T> {
+  final Right<T, FormatException> delegate;
   final IterableString next;
 
   _ParseFailure(this.delegate, this.next);
@@ -105,7 +105,7 @@ class _ParseFailure implements ParseFailure {
   dynamic fold(onLeft(dynamic left), onRight(FormatException right)) =>
       delegate.fold(onLeft, onRight);
 
-  Either<FormatException, dynamic> swap() =>
+  Either<FormatException, T> swap() =>
       delegate.swap();
 
   String toString() =>
