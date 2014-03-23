@@ -32,6 +32,5 @@ abstract class IterableString implements Iterable<int> {
 }
 
 abstract class CodePointIterator implements IndexedIterator<int> {
-  IterableString get iterable;
   bool get eof;
 }

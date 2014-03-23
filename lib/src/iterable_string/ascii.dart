@@ -28,12 +28,10 @@ class _AsciiIterator
       ForwardingIndexedIterator<int>
     implements CodePointIterator {
   final IndexedIterator<int> delegate;
-  final _AsciiString iterable;
   bool _eof = false;
 
   _AsciiIterator(final _AsciiString str) :
-    this.delegate = new IndexedIterator.list(str._bytes),
-    this.iterable = str;
+    this.delegate = new IndexedIterator.list(str._bytes);
 
   int get current {
     final int retval = delegate.current;

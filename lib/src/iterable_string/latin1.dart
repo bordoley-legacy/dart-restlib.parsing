@@ -28,13 +28,11 @@ class _Latin1Iterator
       ForwardingIndexedIterator<int>
     implements CodePointIterator {
   final IndexedIterator<int> delegate;
-  final _Latin1String iterable;
 
   bool _eof = false;
 
   _Latin1Iterator(final _Latin1String str) :
-    this.delegate = new IndexedIterator.list(str._bytes),
-    this.iterable = str;
+    this.delegate = new IndexedIterator.list(str._bytes);
 
   int get current {
     final int retval = delegate.current;
