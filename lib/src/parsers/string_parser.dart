@@ -1,13 +1,12 @@
 part of parsing;
 
 class _StringParser extends ParserBase<String> {
-  final IterableString str;
   final String retval;
 
-  const _StringParser(this.str, this.retval);
+  const _StringParser(this.retval);
 
   ParseResult<String> parseFrom(final IterableString str) {
-    final CodePointIterator ref = this.str.iterator;
+    final CodePointIterator ref = new IterableString(retval).iterator;
     final CodePointIterator itr = str.iterator;
 
     while(ref.moveNext()) {
@@ -20,9 +19,9 @@ class _StringParser extends ParserBase<String> {
       }
     }
 
-    return new ParseResult.success(retval, str.substring(itr.index));
+    return new ParseResult.success(retval, str.substring(itr.index + 1));
   }
 
   String toString() =>
-      "${str}";
+      "${retval}";
 }
