@@ -239,4 +239,25 @@ main() {
     .then((final AsyncParseResult result) =>
               print(result));
               */
+
+  /*
+  string("abc").optional().parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
+    .then((final AsyncParseResult result) =>
+                print(result));
+
+  string("abc").optional().parseAsync(new Stream.fromIterable([new IterableString("   "), new IterableString("jklj   ")]))
+    .then((final AsyncParseResult result) =>
+                print(result));
+                */
+/*
+  (string("abc") | string("def") | string("ghi"))
+    .parseAsync(new Stream.fromIterable([new IterableString("a"), new IterableString("b"), new IterableString("c")]))
+    .then((final AsyncParseResult result) =>
+        print(result));
+
+  (string("abc") | string("def") | string("ghi"))
+    .parseAsync(new Stream.fromIterable([new IterableString("g"), new IterableString("h"), new IterableString("i")]))
+    .then((final AsyncParseResult result) =>
+        print(result));
+        */
 }
