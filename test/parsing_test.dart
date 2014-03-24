@@ -204,9 +204,17 @@ main() {
     .then((final AsyncParseResult result) {
       print(result.left);
     }); */
-
+/*
   (string("ab") ^ isChar("c")).parseAsync(new Stream.fromIterable([new IterableString("fgh")]))
     .then((final AsyncParseResult result) {
       print(result.left);
     });
+    */
+
+  EOF.parseAsync(new Stream.fromIterable([new IterableString(""), new IterableString("")]))
+    .then((final AsyncParseResult result) {
+      print(result);
+    });
+
+
 }
