@@ -1,24 +1,51 @@
 part of parsing;
 
 class _AsciiString extends IterableBase<int> implements IterableString {
-  final List<int> _bytes;
+  final List<int> bytes;
 
-  const _AsciiString(this._bytes);
+  const _AsciiString(this.bytes);
 
   bool get isEmpty =>
-      _bytes.isEmpty;
+      bytes.isEmpty;
 
   int get length =>
-      _bytes.length;
+      bytes.length;
 
   CodePointIterator get iterator =>
       new _AsciiIterator(this);
 
-  IterableString substring(int startIndex, [int endIndex]) =>
-      new _AsciiString(sublist(this._bytes, startIndex, endIndex - startIndex));
+  IterableString operator+(final IterableString other) {
+    checkArgument(other is _AsciiString || other.isEmpty);
+    return other.isEmpty ? this : new _AsciiString(concatLists([this.bytes, other.bytes]));
+  }
+
+  IterableString appendAll(Iterable<IterableString> strings) {
+    if (strings.isEmpty) {
+      return this;
+    }
+
+    final List<int> delegate =
+        concatLists(
+            [bytes]..addAll(
+                strings.map((final IterableString str) {
+                  checkArgument(str is _AsciiString || str.isEmpty);
+                  return str.bytes;
+                })));
+
+    if (delegate.length == this.bytes.length) {
+      return this;
+    }
+
+    return new _AsciiString(delegate);
+  }
+
+  IterableString substring(int startIndex, [int endIndex]) {
+    final List<int> delegate = sublist(this.bytes, startIndex, endIndex - startIndex);
+    return delegate.isEmpty ? IterableString.EMPTY : new _AsciiString(delegate);
+  }
 
   String toString() =>
-      ASCII.decode(_bytes, allowInvalid:false);
+      ASCII.decode(bytes, allowInvalid:false);
 }
 
 class _AsciiIterator
@@ -31,7 +58,7 @@ class _AsciiIterator
   bool _eof = false;
 
   _AsciiIterator(final _AsciiString str) :
-    this.delegate = new IndexedIterator.list(str._bytes);
+    this.delegate = new IndexedIterator.list(str.bytes);
 
   int get current {
     final int retval = delegate.current;

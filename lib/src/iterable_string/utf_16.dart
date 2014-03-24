@@ -5,6 +5,9 @@ class _Utf16String extends IterableBase<int> implements IterableString {
 
   const _Utf16String(this._string);
 
+  List<int> get bytes =>
+      _string.codeUnits;
+
   bool get isEmpty =>
       _string.isEmpty;
 
@@ -14,8 +17,20 @@ class _Utf16String extends IterableBase<int> implements IterableString {
   CodePointIterator get iterator =>
       new _Utf16Iterator(this);
 
-  IterableString substring(int startIndex, [int endIndex]) =>
-      new IterableString(_string.substring(startIndex, endIndex));
+  IterableString operator+(final IterableString other) {
+    return other.isEmpty ? this : new _Utf16String(_string + other.toString());
+  }
+
+  IterableString appendAll(Iterable<IterableString> strings) {
+    final StringBuffer buffer =
+        new StringBuffer()..write(_string)..writeAll(strings);
+    return new _Utf16String(buffer.toString());
+  }
+
+  IterableString substring(int startIndex, [int endIndex]) {
+    final String delegate = _string.substring(startIndex, endIndex);
+    return delegate.isEmpty ? IterableString.EMPTY : new _Utf16String(delegate);
+  }
 
   String toString() =>
       _string;

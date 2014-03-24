@@ -1,24 +1,51 @@
 part of parsing;
 
 class _Latin1String extends IterableBase<int> implements IterableString {
-  final List<int> _bytes;
+  final List<int> bytes;
 
-  const _Latin1String(this._bytes);
+  const _Latin1String(this.bytes);
 
   bool get isEmpty =>
-      _bytes.isEmpty;
+      bytes.isEmpty;
 
   int get length =>
-      _bytes.length;
+      bytes.length;
 
   CodePointIterator get iterator =>
       new _Latin1Iterator(this);
 
-  IterableString substring(int startIndex, [int endIndex]) =>
-      new _Latin1String(sublist(this._bytes, startIndex, endIndex - startIndex));
+  IterableString operator+(final IterableString other) {
+    checkArgument(other is _Latin1String || other.isEmpty);
+    return other.isEmpty ? this : new _Latin1String(concatLists([this.bytes, other.bytes]));
+  }
+
+  IterableString appendAll(Iterable<IterableString> strings) {
+    if (strings.isEmpty) {
+      return this;
+    }
+
+    final List<int> delegate =
+        concatLists(
+            [bytes]..addAll(
+                strings.map((final IterableString str) {
+                  checkArgument(str is _Latin1String || str.isEmpty);
+                  return str.bytes;
+                })));
+
+    if (delegate.length == this.bytes.length) {
+      return this;
+    }
+
+    return new _Latin1String(delegate);
+  }
+
+  IterableString substring(int startIndex, [int endIndex]) {
+    final List<int> delegate = sublist(this.bytes, startIndex, endIndex - startIndex);
+    return delegate.isEmpty ? IterableString.EMPTY : new _Latin1String(delegate);
+  }
 
   String toString() =>
-      LATIN1.decode(_bytes, allowInvalid:false);
+      LATIN1.decode(bytes, allowInvalid:false);
 }
 
 class _Latin1Iterator
@@ -32,7 +59,7 @@ class _Latin1Iterator
   bool _eof = false;
 
   _Latin1Iterator(final _Latin1String str) :
-    this.delegate = new IndexedIterator.list(str._bytes);
+    this.delegate = new IndexedIterator.list(str.bytes);
 
   int get current {
     final int retval = delegate.current;
