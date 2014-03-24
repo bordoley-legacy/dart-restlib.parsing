@@ -55,11 +55,13 @@ class _Latin1Iterator
       ForwardingIndexedIterator<int>
     implements CodePointIterator {
   final IndexedIterator<int> delegate;
+  final int length;
 
   bool _eof = false;
 
   _Latin1Iterator(final _Latin1String str) :
-    this.delegate = new IndexedIterator.list(str.bytes);
+    this.delegate = new IndexedIterator.list(str.bytes),
+    this.length = str.length;
 
   int get current {
     final int retval = delegate.current;
@@ -73,7 +75,7 @@ class _Latin1Iterator
 
   void set index(final int index) {
     super.index = index;
-    if (index < delegate.iterable.length) {
+    if (index < length) {
       _eof = false;
     }
   }

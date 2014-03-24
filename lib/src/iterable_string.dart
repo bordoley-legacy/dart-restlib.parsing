@@ -36,7 +36,7 @@ class _EmptyIterableString extends IterableBase<int> implements IterableString {
       EMPTY_LIST;
 
   CodePointIterator get iterator =>
-      EMPTY_LIST.iterator;
+      const _EmptyCodePointIterator();
 
   bool get isEmpty =>
       true;
@@ -59,6 +59,29 @@ class _EmptyIterableString extends IterableBase<int> implements IterableString {
 
 abstract class CodePointIterator implements IndexedIterator<int> {
   bool get eof;
+}
+
+class _EmptyCodePointIterator implements CodePointIterator {
+  const _EmptyCodePointIterator();
+
+  int get current =>
+      null;
+
+  bool get eof =>
+      true;
+
+  int get index =>
+      -1;
+
+  void set index(final int index) {
+    checkRangeInclusive(-1, -1, index);
+  }
+
+  bool moveNext() =>
+      false;
+
+  bool movePrevious() =>
+      false;
 }
 
 IterableString concatStrings(final Iterable<IterableString> strings) {
