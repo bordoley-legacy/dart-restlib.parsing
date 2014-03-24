@@ -4,7 +4,7 @@ class _EofParser extends ParserBase {
   static const ParseSuccess SUCCESS =
       const _ParseSuccess(
           const Either.leftConstant(const Option.constant("")),
-          IterableString.EMPTY_UTF_16);
+          IterableString.EMPTY);
 
   const _EofParser();
 
