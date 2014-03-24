@@ -223,8 +223,20 @@ main() {
       .then((final AsyncParseResult result) =>
           print(result));
 */
-
+/*
   string("abc").many().parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
       .then((final AsyncParseResult result) =>
           print(result));
+          */
+/*
+  string("abc").map((final String str) => "def").many()
+    .parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
+    .then((final AsyncParseResult result) =>
+              print(result));
+
+  string("abc").flatMap((final String str) => new Option("def")).many()
+    .parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
+    .then((final AsyncParseResult result) =>
+              print(result));
+              */
 }
