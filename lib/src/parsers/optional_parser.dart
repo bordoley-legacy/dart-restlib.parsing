@@ -12,6 +12,13 @@ class _OptionalParser<T> extends ParserBase<Option<T>> {
           new ParseResult.success(Option.NONE, result.next);
   }
 
+
+  Future<AsyncParseResult<Option<T>>> parseAsync(final Stream<IterableString> codepoints) =>
+      delegate.parseAsync(codepoints).then((final AsyncParseResult<T> result) =>
+          (result is AsyncParseSuccess) ?
+              new AsyncParseResult.success(result.left, result.next) :
+                new AsyncParseResult.success(Option.NONE, result.next));
+
   String toString() =>
       "Optional($delegate)";
 }

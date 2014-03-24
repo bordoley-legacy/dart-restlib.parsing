@@ -31,6 +31,31 @@ class _TupleParser extends ParserBase<Tuple> implements Parser<Tuple> {
     return new ParseResult.success(Tuple.create(tokens), next);
   }
 
+  Future<AsyncParseResult<Tuple>> parseAsync(Stream<IterableString> codepoints) {
+    final MutableSequence tokens = new GrowableSequence();
+
+    Future retval;
+    for (final Parser p in _parsers) {
+      if (isNull(retval)) {
+        retval = p.parseAsync(codepoints);
+      } else {
+        retval = retval.then((final AsyncParseResult result) =>
+            result.fold(
+                (final value) {
+                  tokens.add(value);
+                  return p.parseAsync(result.next);
+                }, (final FormatException e) => result));
+      }
+    }
+
+    return retval.then((final AsyncParseResult result) =>
+        result.fold(
+            (final value) {
+              tokens.add(value);
+              return new AsyncParseResult.success(tokens, result.next);
+            }, (_) => result));
+  }
+
   String toString() =>
       "(" + _parsers.join(" + ") + ")";
 }

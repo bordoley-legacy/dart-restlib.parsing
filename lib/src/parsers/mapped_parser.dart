@@ -23,6 +23,16 @@ class _MappedParser<T> extends ParserBase<T> {
                 new ParseResult.failure(str));
   }
 
+  Future<AsyncParseResult<T>> parseAsync(final Stream<IterableString> codepoints) =>
+      delegate.parseAsync(codepoints).then((final AsyncParseResult result) =>
+          result is AsyncParseFailure ?
+              result :
+                result.left.map(f)
+                  .map((final T value) =>
+                      new AsyncParseResult.success(value, result.next))
+                  .orCompute(() =>
+                      new AsyncParseResult.failure(str)));
+
   String toString() =>
       "Mapped($delegate)";
 }
@@ -44,8 +54,19 @@ class _FlatMappedParser<T> extends ParserBase<T> {
             .map((final T result) =>
                 new ParseResult.success(result, delegateResult.next))
             .orCompute(() =>
+                //
                 new ParseResult.failure(str));
   }
+
+  Future<AsyncParseResult<T>> parseAsync(final Stream<IterableString> bytes) =>
+        delegate.parseAsync(bytes).then((final AsyncParseResult result) =>
+            result is AsyncParseFailure ?
+                result :
+                  result.left.flatMap(f)
+                    .map((final T value) =>
+                        new AsyncParseResult.success(value, result.next))
+                    .orCompute(() =>
+                        new AsyncParseResult.failure(str)));
 
   String toString() =>
       "FlatMapped($delegate)";

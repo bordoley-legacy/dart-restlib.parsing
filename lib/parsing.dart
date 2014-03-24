@@ -1,5 +1,6 @@
 library parsing;
 
+import "dart:async";
 import "dart:collection";
 import "dart:convert";
 
@@ -7,6 +8,7 @@ import "package:restlib_common/collections.dart";
 import "package:restlib_common/collections.forwarding.dart";
 import "package:restlib_common/collections.immutable.dart";
 import "package:restlib_common/collections.mutable.dart";
+import "package:restlib_common/objects.dart";
 import "package:restlib_common/preconditions.dart";
 
 part "src/iterable_string/ascii.dart";
@@ -21,6 +23,7 @@ part "src/parsers/mapped_parser.dart";
 part "src/parsers/optional_parser.dart";
 part "src/parsers/or_parser.dart";
 part "src/parsers/recurse_parser.dart";
+part "src/parsers/string_parser.dart";
 part "src/parsers/tuple_parser.dart";
 part "src/rune_matchers/and_rune_matcher.dart";
 part "src/rune_matchers/any_rune_matcher.dart";
@@ -34,8 +37,10 @@ part "src/abstract_rune_matcher.dart";
 part "src/iterable_string.dart";
 part "src/parser.dart";
 part "src/parser_base.dart";
+part "src/replay_stream.dart";
 part "src/rune_matcher.dart";
-part "src/parsers/string_parser.dart";
+part "src/stream_transformers.dart";
+
 
 // See http://tools.ietf.org/html/rfc5234#appendix-B.1
 

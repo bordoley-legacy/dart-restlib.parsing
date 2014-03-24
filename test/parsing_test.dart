@@ -1,5 +1,7 @@
 library parsing_test;
 
+import "dart:async";
+
 import "package:restlib_common/collections.dart";
 import "package:restlib_parsing/parsing.dart";
 import "package:unittest/unittest.dart";
@@ -184,5 +186,27 @@ parsingTestGroups() {
 }
 
 main() {
-  parsingTestGroups();
+  //parsingTestGroups();
+/*
+  POUND_SIGN.many().parseAsync(new Stream.fromIterable([new IterableString("####555577")]))
+    .then((final AsyncParseResult result) {
+      print(result.left);
+      isChar("5").many().parseAsync(result.next).then((final AsyncParseResult result) {
+        print(result.left);
+        isChar("7").parseAsync(result.next).then((final AsyncParseResult result) {
+          print(result.left);
+        });
+      });
+    });
+    */
+/*
+  (POUND_SIGN + string("1234")).parseAsync(new Stream.fromIterable([new IterableString("#12"), new IterableString("3"), new IterableString("4")]))
+    .then((final AsyncParseResult result) {
+      print(result.left);
+    }); */
+
+  (string("ab") ^ isChar("c")).parseAsync(new Stream.fromIterable([new IterableString("fgh")]))
+    .then((final AsyncParseResult result) {
+      print(result.left);
+    });
 }

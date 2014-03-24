@@ -9,6 +9,9 @@ class _RecurseParser<T> extends ParserBase<T> {
   ParseResult<T> parseFrom(final IterableString str) =>
       delegate().parseFrom(str);
 
+  Future<AsyncParseResult<T>> parseAsync(final Stream<IterableString> codepoints) =>
+      delegate().parseAsync(codepoints);
+
   String toString() =>
       "rec(${delegate()})";
 }

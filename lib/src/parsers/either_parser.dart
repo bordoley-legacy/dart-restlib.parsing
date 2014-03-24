@@ -22,6 +22,16 @@ class _EitherParser<T1, T2> extends ParserBase<Either<T1, T2>> {
             new ParseResult.eof(str) : new ParseResult.failure(str);
   }
 
+  Future<AsyncParseResult<Either<T1, T2>>> parseAsync(Stream<IterableString> codepoints) =>
+    fst.parseAsync(codepoints).then((final AsyncParseResult<T1> result1) =>
+        result1.fold(
+            (final T1 value) => new AsyncParseResult.success(new Either.leftValue(value), result1.next),
+            (_) => snd.parseAsync(result1.next)
+                    .then((final AsyncParseResult<T2> result2) =>
+                        result2.fold(
+                            (final T2 value) => new AsyncParseResult.success(new Either.leftValue(value), result2.next),
+                            (_) => result2))));
+
   String toString() =>
       "($fst | $snd)";
 }

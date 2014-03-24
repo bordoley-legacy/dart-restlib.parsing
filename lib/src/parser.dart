@@ -25,6 +25,8 @@ abstract class Parser<T> {
 
   ParseResult<T> parse(String str);
 
+  Future<AsyncParseResult<T>> parseAsync(Stream<IterableString> codepoints);
+
   T parseValue(String str);
 
   ParseResult<T> parseFrom(IterableString str);
@@ -119,4 +121,83 @@ class _ParseFailure<T> implements ParseFailure<T> {
 
 class EndOfFileException extends FormatException {
   EndOfFileException() : super("Reached EOF");
+}
+
+abstract class AsyncParseResult<T> implements Either<T, FormatException> {
+  factory AsyncParseResult.success(final T result, final Stream<IterableString> next) =>
+      new _AsyncParseSuccess(new Either.leftValue(checkNotNull(result)), checkNotNull(next));
+
+  factory AsyncParseResult.failure(final Stream<IterableString> next, [final String message = ""]) =>
+      new _AsyncParseFailure(
+          new Either.rightValue(new FormatException(message)),
+          checkNotNull(next));
+
+
+  Stream<IterableString> get next;
+}
+
+abstract class AsyncParseSuccess<T> implements Left<T,FormatException>, AsyncParseResult<T> {}
+
+abstract class AsyncParseFailure<T> implements Right<T,FormatException>, AsyncParseResult<T> {}
+
+class _AsyncParseSuccess<T> implements AsyncParseSuccess<T> {
+  final Left<T, FormatException> delegate;
+  final Stream<IterableString> next;
+
+  const _AsyncParseSuccess(this.delegate, this.next);
+
+  int get hashCode =>
+      delegate.hashCode;
+
+  Some<T> get left =>
+      delegate.left;
+
+  None get right =>
+      delegate.right;
+
+  T get value =>
+      delegate.value;
+
+  bool operator==(other) =>
+      delegate == other;
+
+  dynamic fold(onLeft(T left), onRight(dynamic right)) =>
+      delegate.fold(onLeft, onRight);
+
+  Either<FormatException, T> swap() =>
+      delegate.swap();
+
+  String toString() =>
+      delegate.toString();
+}
+
+class _AsyncParseFailure<T> implements AsyncParseFailure<T> {
+  final Right<T, FormatException> delegate;
+  final Stream<IterableString> next;
+
+  _AsyncParseFailure(this.delegate, this.next);
+
+  int get hashCode =>
+      delegate.hashCode;
+
+  None get left =>
+        delegate.left;
+
+  Some<FormatException> get right =>
+      delegate.right;
+
+  FormatException get value =>
+      delegate.value;
+
+  bool operator==(other) =>
+      delegate == other;
+
+  dynamic fold(onLeft(dynamic left), onRight(FormatException right)) =>
+      delegate.fold(onLeft, onRight);
+
+  Either<FormatException, T> swap() =>
+      delegate.swap();
+
+  String toString() =>
+      delegate.toString();
 }
