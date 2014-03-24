@@ -9,7 +9,7 @@ class _OptionalParser<T> extends ParserBase<Option<T>> {
     final ParseResult<T> result = delegate.parseFrom(str);
     return (result is ParseSuccess) ?
         new ParseResult.success(result.left, result.next) :
-          new ParseResult.success(Option.NONE, str);
+          new ParseResult.success(Option.NONE, result.next);
   }
 
   String toString() =>
