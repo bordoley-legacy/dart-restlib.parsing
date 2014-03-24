@@ -17,8 +17,20 @@ class ReplayStream<T> extends Stream<T> {
   bool _isReplay = true;
   bool _isSubscribed = false;
   bool _isClosed = false;
+  bool _retain = false;
 
   ReplayStream._(this._stream);
+
+  bool get retain =>
+      _retain;
+
+  void set retain(bool retain) {
+    _retain = retain;
+    if (!retain && _controllers.isEmpty) {
+      subscription.map((final StreamSubscription subscription) =>
+                        subscription.cancel());
+    }
+  }
 
   Iterable<T> get values =>
       _events
@@ -53,10 +65,9 @@ class ReplayStream<T> extends Stream<T> {
       controller = new StreamController(
           onCancel: () {
             _controllers.remove(controller);
-            if (_controllers.isEmpty) {
-              subscription.map((final StreamSubscription subscription) {
-                subscription.cancel();
-              });
+            if (!retain && _controllers.isEmpty) {
+              subscription.map((final StreamSubscription subscription) =>
+                  subscription.cancel());
             }
           });
 

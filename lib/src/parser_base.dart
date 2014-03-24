@@ -77,6 +77,8 @@ abstract class ParserBase<T> implements Parser<T> {
             stream.stopReplay();
 
             completer.complete(new AsyncParseResult.failure(controller.stream));
+          } else {
+            subscription.cancel();
           }
         }
     );

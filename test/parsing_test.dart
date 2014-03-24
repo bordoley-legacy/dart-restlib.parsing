@@ -210,11 +210,21 @@ main() {
       print(result.left);
     });
     */
-
+/*
   EOF.parseAsync(new Stream.fromIterable([new IterableString(""), new IterableString("")]))
+    .then((final AsyncParseResult result) =>
+       print(result))
     .then((final AsyncParseResult result) {
       print(result);
-    });
+    });*/
 
+/*
+   (string("abc") + EOF).parseAsync(new Stream.fromIterable([new IterableString(""), new IterableString("abc")]))
+      .then((final AsyncParseResult result) =>
+          print(result));
+*/
 
+  string("abc").many().parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
+      .then((final AsyncParseResult result) =>
+          print(result));
 }
