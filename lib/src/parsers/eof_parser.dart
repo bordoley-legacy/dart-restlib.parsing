@@ -10,21 +10,15 @@ class _EofParser extends ParserBase {
 
   Future<AsyncParseResult> parseAsync(Stream<IterableString> codepoints) {
     final ReplayStream<IterableString> stream = new ReplayStream(codepoints);
-    stream.retain = true;
+    return stream.any((final IterableString str) => str.isNotEmpty)
+        .then((final bool result) {
+          if (result) {
+            return new AsyncParseResult.failure(stream.replay());
+          }
 
-    return stream.firstWhere((final IterableString str) =>
-        str.isNotEmpty, defaultValue: () =>
-            IterableString.EMPTY).then((final IterableString str) {
-              if (str.isEmpty) {
-                return new AsyncParseResult.success("", new Stream.fromIterable([]));
-              }
-
-              final IterableString current = concatStrings(stream.values);
-              stream.stopReplay;
-              final StreamController controller = new StreamController();
-              controller..add(current)..addStream(stream).then((_) => stream.retain = false);
-              return new AsyncParseResult.failure(controller.stream);
-            });
+          stream.replay(replayEvents:false).listen(null).cancel();
+          return new AsyncParseResult.success("", new Stream.fromIterable([]));
+        });
   }
 
   ParseResult parseFrom(final IterableString str) =>

@@ -50,35 +50,24 @@ abstract class ParserBase<T> implements Parser<T> {
         (_) {
           final ParseResult result = parseFrom(concatStrings(stream.values));
           result.fold(
-              (final T value) {
-                stream.stopReplay();
-                final StreamController<IterableString> controller = new StreamController();
-                controller..add(result.next)..addStream(stream).then((_) => subscription.cancel());
-                completer.complete(new AsyncParseResult.success(value, controller.stream));
-              }, (final FormatException e) {
+              (final T value) =>
+                  completer.complete(
+                      new AsyncParseResult.success(
+                          value, stream.replay(replayEvents: false, prepend: [result.next]))),
+              (final FormatException e) {
                 if (e is! EndOfFileException) {
-                  stream.stopReplay();
-
-                  final StreamController<IterableString> controller = new StreamController();
-                  controller..add(result.next)..addStream(stream).then((_) => subscription.cancel());
-                  completer.complete(new AsyncParseResult.failure(controller.stream));
+                  completer.complete(
+                      new AsyncParseResult.failure(stream.replay(replayEvents: false, prepend: [result.next])));
                 }
               });
         }, onError: (e, st) {
           subscription.cancel();
-          stream.stopReplay();
+          stream.replay(replayEvents:false).listen(null).cancel();
           completer.completeError(e, st);
         }, onDone: () {
           if (!completer.isCompleted) {
-            final StreamController<IterableString> controller = new StreamController();
-            stream.values.forEach((final IterableString str) =>
-                controller.add(str));
-            controller.addStream(stream).then((_) => subscription.cancel());;
-            stream.stopReplay();
-
-            completer.complete(new AsyncParseResult.failure(controller.stream));
-          } else {
-            subscription.cancel();
+            completer.complete(
+                new AsyncParseResult.failure(stream.replay(replayEvents: true)));
           }
         }
     );

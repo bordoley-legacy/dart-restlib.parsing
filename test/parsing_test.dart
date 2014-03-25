@@ -187,7 +187,7 @@ parsingTestGroups() {
 
 main() {
   //parsingTestGroups();
-/*
+
   POUND_SIGN.many().parseAsync(new Stream.fromIterable([new IterableString("####555577")]))
     .then((final AsyncParseResult result) {
       print(result.left);
@@ -198,36 +198,32 @@ main() {
         });
       });
     });
-    */
-/*
+
+
   (POUND_SIGN + string("1234")).parseAsync(new Stream.fromIterable([new IterableString("#12"), new IterableString("3"), new IterableString("4")]))
     .then((final AsyncParseResult result) {
       print(result.left);
-    }); */
-/*
+    });
+
   (string("ab") ^ isChar("c")).parseAsync(new Stream.fromIterable([new IterableString("fgh")]))
     .then((final AsyncParseResult result) {
       print(result.left);
     });
-    */
-/*
-  EOF.parseAsync(new Stream.fromIterable([new IterableString(""), new IterableString("")]))
-    .then((final AsyncParseResult result) =>
-       print(result))
-    .then((final AsyncParseResult result) {
-      print(result);
-    });*/
 
-/*
+
+  EOF.parseAsync(new Stream.fromIterable([new IterableString(""), new IterableString("")]))
+    .then((final AsyncParseResult result) {
+       print(result);
+    });
+
    (string("abc") + EOF).parseAsync(new Stream.fromIterable([new IterableString(""), new IterableString("abc")]))
       .then((final AsyncParseResult result) =>
           print(result));
-*/
-/*
+
+
   string("abc").many().parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
       .then((final AsyncParseResult result) =>
           print(result));
-          */
 /*
   string("abc").map((final String str) => "def").many()
     .parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
@@ -238,9 +234,7 @@ main() {
     .parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
     .then((final AsyncParseResult result) =>
               print(result));
-              */
 
-  /*
   string("abc").optional().parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
     .then((final AsyncParseResult result) =>
                 print(result));
@@ -248,16 +242,14 @@ main() {
   string("abc").optional().parseAsync(new Stream.fromIterable([new IterableString("   "), new IterableString("jklj   ")]))
     .then((final AsyncParseResult result) =>
                 print(result));
-                */
-/*
+
   (string("abc") | string("def") | string("ghi"))
     .parseAsync(new Stream.fromIterable([new IterableString("a"), new IterableString("b"), new IterableString("c")]))
     .then((final AsyncParseResult result) =>
         print(result));
 
   (string("abc") | string("def") | string("ghi"))
-    .parseAsync(new Stream.fromIterable([new IterableString("g"), new IterableString("h"), new IterableString("i")]))
+    .parseAsync(new Stream.fromIterable([new IterableString("d"), new IterableString("e"), new IterableString("f")]))
     .then((final AsyncParseResult result) =>
-        print(result));
-        */
+        print(result));*/
 }

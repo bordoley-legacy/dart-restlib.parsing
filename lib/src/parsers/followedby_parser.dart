@@ -21,35 +21,20 @@ class _FollowedByParser<T> extends ParserBase<T> {
 
   Future<AsyncParseResult<Tuple>> parseAsync(Stream<IterableString> codepoints) {
     final ReplayStream stream1 = new ReplayStream(codepoints);
-    stream1.retain = true;
 
     parser.parseAsync(stream1).then((final AsyncParseResult<T> result) =>
         result.fold(
             (final T value) {
               final ReplayStream stream2 = new ReplayStream(result.next);
-              stream2.retain = true;
 
               return next.parseAsync(stream2).then((final AsyncParseResult<T> nextResult) =>
                   nextResult.fold(
                       (_) {
-                        stream1.retain = false;
-                        stream1.stopReplay;
-
-                        final IterableString current = concatStrings(stream2.values);
-                        stream2.stopReplay;
-                        final StreamController controller = new StreamController();
-                        controller..add(current)..addStream(stream2).then((_) => stream2.retain = false);
-                        return new AsyncParseResult.success(value, controller.stream);
+                        stream1.replay(replayEvents:false).listen(null).cancel();
+                        return new AsyncParseResult.success(value, stream2.replay());
                       }, (_) {
-                        stream2.retain = false;
-                        stream2.stopReplay;
-
-                        final IterableString current = concatStrings(stream1.values);
-                        stream1.stopReplay;
-
-                        final StreamController controller = new StreamController();
-                        controller..add(current)..addStream(stream1).then((_) => stream1.retain = false);
-                        return new AsyncParseResult.failure(controller.stream);
+                        stream2.replay(replayEvents:false).listen(null).cancel();
+                        return new AsyncParseResult.failure(stream1.replay());
                       }));
             }, (_) => result));
   }

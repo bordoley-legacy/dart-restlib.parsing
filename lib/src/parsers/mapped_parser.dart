@@ -25,22 +25,16 @@ class _MappedParser<T> extends ParserBase<T> {
 
   Future<AsyncParseResult<T>> parseAsync(final Stream<IterableString> codepoints) {
     final ReplayStream<IterableString> stream = new ReplayStream(codepoints);
-    stream.retain = true;
 
     return delegate.parseAsync(codepoints).then((final AsyncParseResult result) =>
           result is AsyncParseFailure ?
               result :
                 result.left.map(f)
                   .map((final T value) {
-                    stream.stopReplay;
-                    stream.retain = false;
+                    stream.replay(replayEvents:false).listen(null).cancel();
                     return new AsyncParseResult.success(value, result.next);
                   }).orCompute(() {
-                    final IterableString current = concatStrings(stream.values);
-                    stream.stopReplay;
-                    final StreamController controller = new StreamController();
-                    controller..add(current)..addStream(stream).then((_) => stream.retain = false);
-                    return new AsyncParseResult.failure(controller.stream);
+                    return new AsyncParseResult.failure(stream.replay());
                   }));
   }
 
@@ -71,24 +65,19 @@ class _FlatMappedParser<T> extends ParserBase<T> {
 
   Future<AsyncParseResult<T>> parseAsync(final Stream<IterableString> codepoints) {
     final ReplayStream<IterableString> stream = new ReplayStream(codepoints);
-    stream.retain = true;
 
     return delegate.parseAsync(codepoints).then((final AsyncParseResult result) =>
           result is AsyncParseFailure ?
               result :
                 result.left.flatMap(f)
                   .map((final T value) {
-                    stream.stopReplay;
-                    stream.retain = false;
+                    stream.replay(replayEvents:false).listen(null).cancel();
                     return new AsyncParseResult.success(value, result.next);
                   }).orCompute(() {
-                    final IterableString current = concatStrings(stream.values);
-                    stream.stopReplay;
-                    final StreamController controller = new StreamController();
-                    controller..add(current)..addStream(stream).then((_) => stream.retain = false);
-                    return new AsyncParseResult.failure(controller.stream);
+                    return new AsyncParseResult.failure(stream.replay());
                   }));
   }
+
   String toString() =>
       "FlatMapped($delegate)";
 }
