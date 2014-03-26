@@ -31,7 +31,7 @@ class _MappedParser<T> extends ParserBase<T> {
               result :
                 result.left.map(f)
                   .map((final T value) {
-                    stream.replay(replayEvents:false).listen(null).cancel();
+                    stream.disableReplay();
                     return new AsyncParseResult.success(value, result.next);
                   }).orCompute(() {
                     return new AsyncParseResult.failure(stream.replay());
@@ -59,7 +59,6 @@ class _FlatMappedParser<T> extends ParserBase<T> {
             .map((final T result) =>
                 new ParseResult.success(result, delegateResult.next))
             .orCompute(() =>
-                //
                 new ParseResult.failure(str));
   }
 
@@ -71,7 +70,7 @@ class _FlatMappedParser<T> extends ParserBase<T> {
               result :
                 result.left.flatMap(f)
                   .map((final T value) {
-                    stream.replay(replayEvents:false).listen(null).cancel();
+                    stream.disableReplay();
                     return new AsyncParseResult.success(value, result.next);
                   }).orCompute(() {
                     return new AsyncParseResult.failure(stream.replay());

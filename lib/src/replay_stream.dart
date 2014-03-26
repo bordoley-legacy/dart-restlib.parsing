@@ -7,6 +7,7 @@ class ReplayStream<T> extends Stream<T> {
   Option<StreamSubscription> _subscription = Option.NONE;
   Option<StreamController> _replayController = Option.NONE;
   Option<StreamController> _streamController = Option.NONE;
+  bool _replayDisabled = false;
 
   ReplayStream(this._stream);
 
@@ -20,7 +21,7 @@ class ReplayStream<T> extends Stream<T> {
 
   void _addEvent(final Try<T> event) {
     // Only add events when we are not in replay mode;
-    if (_replayController.isEmpty) {
+    if (!_replayDisabled) {
       _events.add(event);
     }
 
@@ -47,6 +48,12 @@ class ReplayStream<T> extends Stream<T> {
         return this._subscription;
       });
 
+  void disableReplay() {
+    checkState(_replayController.isEmpty);
+    _replayDisabled = true;
+    _events.clear();
+  }
+
   StreamSubscription<T> listen(void onData(T event), {Function onError, void onDone(), bool cancelOnError}) {
     checkState(_subscription.isEmpty);
 
@@ -63,7 +70,8 @@ class ReplayStream<T> extends Stream<T> {
     return controller.stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
   }
 
-  Stream<T> replay({bool replayEvents: true, Iterable<T> prepend: const []}) {
+  Stream<T> replay() {
+    checkState(!this._replayDisabled);
     checkState(this._replayController.isEmpty);
 
     if (_streamController.isNotEmpty) {
@@ -80,16 +88,10 @@ class ReplayStream<T> extends Stream<T> {
         sync: false);
 
     this._replayController = new Option(controller);
-
-    prepend.forEach((final T event) =>
-        controller.add(event));
-
-    if (replayEvents) {
-      _events.forEach((final Try<T> event) =>
-          event.then(
-              (final T value) => controller.add(value),
-              onError: (final e, final StackTrace st) => controller.addError(e, st)));
-    }
+    _events.forEach((final Try<T> event) =>
+        event.then(
+            (final T value) => controller.add(value),
+            onError: (final e, final StackTrace st) => controller.addError(e, st)));
 
     _events.clear();
 

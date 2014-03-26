@@ -4,6 +4,7 @@ import "dart:async";
 import "dart:collection";
 import "dart:convert";
 
+import "package:restlib_common/async.dart";
 import "package:restlib_common/collections.dart";
 import "package:restlib_common/collections.forwarding.dart";
 import "package:restlib_common/collections.immutable.dart";

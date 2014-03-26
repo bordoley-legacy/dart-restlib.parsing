@@ -16,7 +16,7 @@ class _EofParser extends ParserBase {
             return new AsyncParseResult.failure(stream.replay());
           }
 
-          stream.replay(replayEvents:false).listen(null).cancel();
+          stream.disableReplay();
           return new AsyncParseResult.success("", new Stream.fromIterable([]));
         });
   }

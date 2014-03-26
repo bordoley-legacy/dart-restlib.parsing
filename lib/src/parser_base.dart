@@ -46,30 +46,46 @@ abstract class ParserBase<T> implements Parser<T> {
     final Completer<AsyncParseResult<T>> completer = new Completer();
     final ReplayStream<IterableString> stream = new ReplayStream(codepoints);
     StreamSubscription subscription;
+    Option<StreamController> controller = Option.NONE;
+
     subscription = stream.listen(
-        (_) {
-          final ParseResult result = parseFrom(concatStrings(stream.values));
-          result.fold(
-              (final T value) =>
-                  completer.complete(
-                      new AsyncParseResult.success(
-                          value, stream.replay(replayEvents: false, prepend: [result.next]))),
-              (final FormatException e) {
-                if (e is! EndOfFileException) {
-                  completer.complete(
-                      new AsyncParseResult.failure(stream.replay(replayEvents: false, prepend: [result.next])));
-                }
-              });
-        }, onError: (e, st) {
-          subscription.cancel();
-          stream.replay(replayEvents:false).listen(null).cancel();
-          completer.completeError(e, st);
+        (final IterableString data) =>
+            controller
+              .map((final StreamController next) =>
+                  next.add(data))
+              .orCompute(() {
+                final ParseResult<T> result = parseFrom(concatStrings(stream.values));
+                result.fold(
+                    (final T value) {
+                        stream.disableReplay();
+
+                        final StreamController next = new StreamController()..add(result.next);
+                        controller = new Option(next);
+
+                        completer.complete(
+                            new AsyncParseResult.success(
+                                value, next.stream));
+                    },
+                    (final FormatException e) {
+                      if (e is! EndOfFileException) {
+                        completer.complete(
+                            new AsyncParseResult.failure(stream.replay()));
+                      }
+                    });
+              }),
+        onError: (e, st) {
+          controller.map((final StreamController controller) => controller.addError(e,st));
+          if (!completer.isCompleted){
+            stream.disableReplay();
+            completer.completeError(e, st);
+          }
         }, onDone: () {
           if (!completer.isCompleted) {
             completer.complete(
-                new AsyncParseResult.failure(stream.replay(replayEvents: true)));
+                new AsyncParseResult.failure(stream.replay()));
           }
-        }
+          controller.map((final StreamController controller) => controller.close());
+        }, cancelOnError: true
     );
 
     return completer.future;

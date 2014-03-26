@@ -224,7 +224,7 @@ main() {
   string("abc").many().parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
       .then((final AsyncParseResult result) =>
           print(result));
-/*
+
   string("abc").map((final String str) => "def").many()
     .parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
     .then((final AsyncParseResult result) =>
@@ -243,13 +243,14 @@ main() {
     .then((final AsyncParseResult result) =>
                 print(result));
 
+
   (string("abc") | string("def") | string("ghi"))
     .parseAsync(new Stream.fromIterable([new IterableString("a"), new IterableString("b"), new IterableString("c")]))
     .then((final AsyncParseResult result) =>
         print(result));
 
   (string("abc") | string("def") | string("ghi"))
-    .parseAsync(new Stream.fromIterable([new IterableString("d"), new IterableString("e"), new IterableString("f")]))
+    .parseAsync(new Stream.fromIterable([new IterableString("g"), new IterableString("h"), new IterableString("i")]))
     .then((final AsyncParseResult result) =>
-        print(result));*/
+        print(result));
 }
