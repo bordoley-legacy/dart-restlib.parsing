@@ -67,7 +67,10 @@ class _Latin1Iterator
     final int retval = delegate.current;
 
     // FIXME: This range could be tightened up
-    checkState(retval < 256 && retval >=0);
+    if (retval < 0 || retval >= 128) {
+      throw new EncodingException();
+    }
+
     return retval;
   }
 

@@ -66,7 +66,9 @@ class _AsciiIterator
   int get current {
     final int retval = delegate.current;
 
-    checkState(retval < 128 && retval >=0);
+    if (retval < 0 || retval >= 128) {
+      throw new EncodingException();
+    }
     return retval;
   }
 

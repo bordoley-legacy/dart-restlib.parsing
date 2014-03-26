@@ -93,3 +93,9 @@ IterableString concatStrings(final Iterable<IterableString> strings) {
 
   return strings.first.appendAll(strings.skip(1));
 }
+
+// Exception when iterating through a string and finding an illegal encoded character
+// that is not at the end of the string.
+class EncodingException implements Exception {
+
+}
