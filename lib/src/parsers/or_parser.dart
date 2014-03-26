@@ -21,17 +21,17 @@ class _OrParser<T> extends ParserBase<T> {
     return eof ? new ParseResult.eof(str) : new ParseResult.failure(str);
   }
 
-  Future<AsyncParseResult<T>> parseAsync(final Stream<IterableString> codepoints) {
+  Future<AsyncParseResult<T>> parseAsync(final Stream<List<int>> bytes, IterableString convert(List<int> bytes)) {
     Future retval;
 
     for (final Parser p in parsers) {
       if (isNull(retval)) {
-        retval = p.parseAsync(codepoints);
+        retval = p.parseAsync(bytes, convert);
       } else {
         retval = retval.then((final AsyncParseResult result) =>
             result.fold(
                 (_) => result,
-                (_) => p.parseAsync(result.next)));
+                (_) => p.parseAsync(result.next, convert)));
       }
     }
     return retval;

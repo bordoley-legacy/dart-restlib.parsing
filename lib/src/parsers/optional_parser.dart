@@ -13,8 +13,8 @@ class _OptionalParser<T> extends ParserBase<Option<T>> {
   }
 
 
-  Future<AsyncParseResult<Option<T>>> parseAsync(final Stream<IterableString> codepoints) =>
-      delegate.parseAsync(codepoints).then((final AsyncParseResult<T> result) =>
+  Future<AsyncParseResult<Option<T>>> parseAsync(final Stream<List<int>> bytes, IterableString convert(List<int> bytes)) =>
+      delegate.parseAsync(bytes, convert).then((final AsyncParseResult<T> result) =>
           (result is AsyncParseSuccess) ?
               new AsyncParseResult.success(result.left, result.next) :
                 new AsyncParseResult.success(Option.NONE, result.next));

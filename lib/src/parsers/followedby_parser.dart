@@ -19,15 +19,15 @@ class _FollowedByParser<T> extends ParserBase<T> {
         }, (_) => parseResult);
   }
 
-  Future<AsyncParseResult<Tuple>> parseAsync(Stream<IterableString> codepoints) {
-    final ReplayStream stream1 = new ReplayStream(codepoints);
+  Future<AsyncParseResult<Tuple>> parseAsync(final Stream<List<int>> bytes, IterableString convert(List<int> bytes)) {
+    final ReplayStream<List<int>> stream1 = new ReplayStream(bytes);
 
-    return parser.parseAsync(stream1).then((final AsyncParseResult<T> result) =>
+    return parser.parseAsync(stream1, convert).then((final AsyncParseResult<T> result) =>
         result.fold(
             (final T value) {
-              final ReplayStream stream2 = new ReplayStream(result.next);
+              final ReplayStream<List<int>> stream2 = new ReplayStream(result.next);
 
-              return next.parseAsync(stream2).then((final AsyncParseResult<T> nextResult) =>
+              return next.parseAsync(stream2, convert).then((final AsyncParseResult<T> nextResult) =>
                   nextResult.fold(
                       (_) {
                         stream1.disableReplay();

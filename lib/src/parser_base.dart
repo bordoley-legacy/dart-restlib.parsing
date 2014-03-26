@@ -42,24 +42,24 @@ abstract class ParserBase<T> implements Parser<T> {
         .parseFrom(new IterableString(str));
   }
 
-  Future<AsyncParseResult<T>> parseAsync(final Stream<IterableString> codepoints) {
+  Future<AsyncParseResult<T>> parseAsync(final Stream<List<int>> bytes, IterableString convert(List<int> bytes)) {
     final Completer<AsyncParseResult<T>> completer = new Completer();
-    final ReplayStream<IterableString> stream = new ReplayStream(codepoints);
+    final ReplayStream<List<int>> stream = new ReplayStream(bytes);
     StreamSubscription subscription;
     Option<StreamController> controller = Option.NONE;
 
     subscription = stream.listen(
-        (final IterableString data) =>
+        (final List<int> data) =>
             controller
               .map((final StreamController next) =>
                   next.add(data))
               .orCompute(() {
-                final ParseResult<T> result = parseFrom(concatStrings(stream.values));
+                final ParseResult<T> result = parseFrom(convert(concatLists(stream.values)));
                 result.fold(
                     (final T value) {
                         stream.disableReplay();
 
-                        final StreamController next = new StreamController()..add(result.next);
+                        final StreamController next = new StreamController()..add(result.next.bytes);
                         controller = new Option(next);
 
                         completer.complete(

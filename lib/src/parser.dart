@@ -25,7 +25,7 @@ abstract class Parser<T> {
 
   ParseResult<T> parse(String str);
 
-  Future<AsyncParseResult<T>> parseAsync(Stream<IterableString> codepoints);
+  Future<AsyncParseResult<T>> parseAsync(Stream<List<int>> bytes, IterableString convert(List<int> bytes));
 
   T parseValue(String str);
 
@@ -124,16 +124,16 @@ class EndOfFileException extends FormatException {
 }
 
 abstract class AsyncParseResult<T> implements Either<T, FormatException> {
-  factory AsyncParseResult.success(final T result, final Stream<IterableString> next) =>
+  factory AsyncParseResult.success(final T result, final Stream<List<int>> next) =>
       new _AsyncParseSuccess(new Either.leftValue(checkNotNull(result)), checkNotNull(next));
 
-  factory AsyncParseResult.failure(final Stream<IterableString> next, [final String message = ""]) =>
+  factory AsyncParseResult.failure(final Stream<List<int>> next, [final String message = ""]) =>
       new _AsyncParseFailure(
           new Either.rightValue(new FormatException(message)),
           checkNotNull(next));
 
 
-  Stream<IterableString> get next;
+  Stream<List<int>> get next;
 }
 
 abstract class AsyncParseSuccess<T> implements Left<T,FormatException>, AsyncParseResult<T> {}
@@ -142,7 +142,7 @@ abstract class AsyncParseFailure<T> implements Right<T,FormatException>, AsyncPa
 
 class _AsyncParseSuccess<T> implements AsyncParseSuccess<T> {
   final Left<T, FormatException> delegate;
-  final Stream<IterableString> next;
+  final Stream<List<int>> next;
 
   const _AsyncParseSuccess(this.delegate, this.next);
 
@@ -173,7 +173,7 @@ class _AsyncParseSuccess<T> implements AsyncParseSuccess<T> {
 
 class _AsyncParseFailure<T> implements AsyncParseFailure<T> {
   final Right<T, FormatException> delegate;
-  final Stream<IterableString> next;
+  final Stream<List<int>> next;
 
   _AsyncParseFailure(this.delegate, this.next);
 

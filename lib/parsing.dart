@@ -40,7 +40,6 @@ part "src/parser.dart";
 part "src/parser_base.dart";
 part "src/replay_stream.dart";
 part "src/rune_matcher.dart";
-part "src/stream_transformers.dart";
 
 
 // See http://tools.ietf.org/html/rfc5234#appendix-B.1

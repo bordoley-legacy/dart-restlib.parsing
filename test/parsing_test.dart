@@ -188,69 +188,28 @@ parsingTestGroups() {
 main() {
   //parsingTestGroups();
 
-  POUND_SIGN.many().parseAsync(new Stream.fromIterable([new IterableString("####555577")]))
-    .then((final AsyncParseResult result) {
-      print(result.left);
-      isChar("5").many().parseAsync(result.next).then((final AsyncParseResult result) {
-        print(result.left);
-        isChar("7").parseAsync(result.next).then((final AsyncParseResult result) {
-          print(result.left);
-        });
-      });
-    });
 
+  Stream<List<int>> generateStream(final Iterable<String> streamParts) =>
+      new Stream.fromIterable(streamParts.map((final String str) => str.codeUnits));
 
-  (POUND_SIGN + string("1234")).parseAsync(new Stream.fromIterable([new IterableString("#12"), new IterableString("3"), new IterableString("4")]))
-    .then((final AsyncParseResult result) {
-      print(result.left);
-    });
+  IterableString convertUtf16(final Iterable<int> bytes) =>
+      new IterableString(new String.fromCharCodes(bytes));
 
-  (string("ab") ^ isChar("c")).parseAsync(new Stream.fromIterable([new IterableString("fgh")]))
-    .then((final AsyncParseResult result) {
-      print(result.left);
-    });
+  Future testAsyncParse(parser, Iterable<String> streamParts) =>
+      parser.parseAsync(generateStream(streamParts), convertUtf16)
+        .then((final AsyncParseResult result) =>
+            print(result.left));
 
-
-  EOF.parseAsync(new Stream.fromIterable([new IterableString(""), new IterableString("")]))
-    .then((final AsyncParseResult result) {
-       print(result);
-    });
-
-   (string("abc") + EOF).parseAsync(new Stream.fromIterable([new IterableString(""), new IterableString("abc")]))
-      .then((final AsyncParseResult result) =>
-          print(result));
-
-
-  string("abc").many().parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
-      .then((final AsyncParseResult result) =>
-          print(result));
-
-  string("abc").map((final String str) => "def").many()
-    .parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
-    .then((final AsyncParseResult result) =>
-              print(result));
-
-  string("abc").flatMap((final String str) => new Option("def")).many()
-    .parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
-    .then((final AsyncParseResult result) =>
-              print(result));
-
-  string("abc").optional().parseAsync(new Stream.fromIterable([new IterableString("abc"), new IterableString("abc   ")]))
-    .then((final AsyncParseResult result) =>
-                print(result));
-
-  string("abc").optional().parseAsync(new Stream.fromIterable([new IterableString("   "), new IterableString("jklj   ")]))
-    .then((final AsyncParseResult result) =>
-                print(result));
-
-
-  (string("abc") | string("def") | string("ghi"))
-    .parseAsync(new Stream.fromIterable([new IterableString("a"), new IterableString("b"), new IterableString("c")]))
-    .then((final AsyncParseResult result) =>
-        print(result));
-
-  (string("abc") | string("def") | string("ghi"))
-    .parseAsync(new Stream.fromIterable([new IterableString("g"), new IterableString("h"), new IterableString("i")]))
-    .then((final AsyncParseResult result) =>
-        print(result));
+  testAsyncParse(POUND_SIGN.many(), ["####555577"]);
+  testAsyncParse(POUND_SIGN + string("1234"), ["#12", "3", "4"]);
+  testAsyncParse(string("ab") ^ isChar("c"), ["fgh"]);
+  testAsyncParse(EOF, ["", ""]);
+  testAsyncParse(string("abc") + EOF, ["", "abc"]);
+  testAsyncParse(string("abc").many(), ["abc", "abc   "]);
+  testAsyncParse(string("abc").map((final String str) => "def").many(),["abc", "abc   "]);
+  testAsyncParse(string("abc").flatMap((final String str) => new Option("def")).many(), ["abc", "abc   "]);
+  testAsyncParse(string("abc").optional(), ["abc", "abc   "]);
+  testAsyncParse(string("abc").optional(), ["   ", "jklj   "]);
+  testAsyncParse(string("abc") | string("def") | string("ghi"), ["a", "b", "c"]);
+  testAsyncParse(string("abc") | string("def") | string("ghi"), ["g", "h", "i"]);
 }

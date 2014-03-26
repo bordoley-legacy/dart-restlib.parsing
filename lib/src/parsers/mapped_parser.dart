@@ -23,10 +23,10 @@ class _MappedParser<T> extends ParserBase<T> {
                 new ParseResult.failure(str));
   }
 
-  Future<AsyncParseResult<T>> parseAsync(final Stream<IterableString> codepoints) {
-    final ReplayStream<IterableString> stream = new ReplayStream(codepoints);
+  Future<AsyncParseResult<T>> parseAsync(final Stream<List<int>> bytes, IterableString convert(List<int> bytes)) {
+    final ReplayStream<List<int>> stream = new ReplayStream(bytes);
 
-    return delegate.parseAsync(codepoints).then((final AsyncParseResult result) =>
+    return delegate.parseAsync(stream, convert).then((final AsyncParseResult result) =>
           result is AsyncParseFailure ?
               result :
                 result.left.map(f)
@@ -62,10 +62,10 @@ class _FlatMappedParser<T> extends ParserBase<T> {
                 new ParseResult.failure(str));
   }
 
-  Future<AsyncParseResult<T>> parseAsync(final Stream<IterableString> codepoints) {
-    final ReplayStream<IterableString> stream = new ReplayStream(codepoints);
+  Future<AsyncParseResult<T>> parseAsync(final Stream<List<int>> bytes, IterableString convert(List<int> bytes)) {
+    final ReplayStream<List<int>> stream = new ReplayStream(bytes);
 
-    return delegate.parseAsync(codepoints).then((final AsyncParseResult result) =>
+    return delegate.parseAsync(stream, convert).then((final AsyncParseResult result) =>
           result is AsyncParseFailure ?
               result :
                 result.left.flatMap(f)

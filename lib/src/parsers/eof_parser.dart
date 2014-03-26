@@ -8,9 +8,9 @@ class _EofParser extends ParserBase {
 
   const _EofParser();
 
-  Future<AsyncParseResult> parseAsync(Stream<IterableString> codepoints) {
-    final ReplayStream<IterableString> stream = new ReplayStream(codepoints);
-    return stream.any((final IterableString str) => str.isNotEmpty)
+  Future<AsyncParseResult> parseAsync(Stream<List<int>> bytes, IterableString convert(List<int> bytes)) {
+    final ReplayStream<List<int>> stream = new ReplayStream(bytes);
+    return stream.any((final List<int> bytes) => bytes.isNotEmpty)
         .then((final bool result) {
           if (result) {
             return new AsyncParseResult.failure(stream.replay());
