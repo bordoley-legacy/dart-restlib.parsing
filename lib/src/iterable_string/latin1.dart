@@ -41,7 +41,7 @@ class _Latin1String extends IterableBase<int> implements IterableString {
 
   IterableString substring(int startIndex, [int endIndex]) {
     endIndex = firstNotNull(endIndex, this.length);
-    final List<int> delegate = sublist(this.bytes, startIndex, endIndex - startIndex);
+    final List<int> delegate = sublist(this.bytes, startIndex, endIndex);
     return delegate.isEmpty ? IterableString.EMPTY : new _Latin1String(delegate);
   }
 
