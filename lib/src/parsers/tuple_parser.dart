@@ -52,7 +52,7 @@ class _TupleParser extends ParserBase<Tuple> implements Parser<Tuple> {
         result.fold(
             (final value) {
               tokens.add(value);
-              return new AsyncParseResult.success(tokens, result.next);
+              return new AsyncParseResult.success(Tuple.create(tokens), result.next);
             }, (_) => result));
   }
 
