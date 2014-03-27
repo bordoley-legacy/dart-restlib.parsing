@@ -40,6 +40,7 @@ class _AsciiString extends IterableBase<int> implements IterableString {
   }
 
   IterableString substring(int startIndex, [int endIndex]) {
+    endIndex = firstNotNull(endIndex, this.length);
     final List<int> delegate = sublist(this.bytes, startIndex, endIndex - startIndex);
     return delegate.isEmpty ? IterableString.EMPTY : new _AsciiString(delegate);
   }
