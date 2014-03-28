@@ -212,4 +212,5 @@ main() {
   testAsyncParse(string("abc") | string("def") | string("ghi"), ["a", "b", "c"]);
   testAsyncParse(string("abc") | string("def") | string("ghi"), ["g", "h", "i"]);
   testAsyncParse((string("d") | string("a")).many(), ["adad"]);
+  testAsyncParse((COMMA + DASH) ^  ALPHA, ["a"]);
 }
