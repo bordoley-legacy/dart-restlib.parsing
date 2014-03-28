@@ -22,7 +22,7 @@ class _OrParser<T> extends ParserBase<T> {
   }
 
   Future<AsyncParseResult<T>> parseAsync(final Stream<List<int>> bytes, IterableString convert(List<int> bytes)) {
-    Future retval;
+    Future<AsyncParseResult<T>> retval;
 
     for (final Parser p in parsers) {
       if (isNull(retval)) {

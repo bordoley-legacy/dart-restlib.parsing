@@ -45,10 +45,9 @@ abstract class ParserBase<T> implements Parser<T> {
   Future<AsyncParseResult<T>> parseAsync(final Stream<List<int>> bytes, IterableString convert(List<int> bytes)) {
     final Completer<AsyncParseResult<T>> completer = new Completer();
     final ReplayStream<List<int>> stream = new ReplayStream(bytes);
-    StreamSubscription subscription;
     Option<StreamController> controller = Option.NONE;
 
-    subscription = stream.listen(
+    stream.listen(
         (final List<int> data) =>
             controller
               .map((final StreamController next) =>

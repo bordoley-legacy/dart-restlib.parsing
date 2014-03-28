@@ -4,6 +4,7 @@ class ReplayStream<T> extends Stream<T> {
   final Stream<T> _stream;
   final MutableSequence<Try<T>> _events = new GrowableSequence();
 
+  bool _streamDone = false;
   Option<StreamSubscription> _subscription = Option.NONE;
   Option<StreamController> _replayController = Option.NONE;
   Option<StreamController> _streamController = Option.NONE;
@@ -41,6 +42,7 @@ class ReplayStream<T> extends Stream<T> {
             (final T data) => _addEvent(new Try.success(data)),
             onError: (final error, [final StackTrace stackTrace]) => _addEvent(new Try.failure(error, stackTrace)),
             onDone: () {
+              _streamDone = true;
               _streamController.map((final StreamController controller) => controller.close());
               _replayController.map((final StreamController controller) => controller.close());
             });
@@ -94,6 +96,10 @@ class ReplayStream<T> extends Stream<T> {
             onError: (final e, final StackTrace st) => controller.addError(e, st)));
 
     _events.clear();
+
+    if (_streamDone) {
+      controller.close();
+    }
 
     return controller.stream;
   }
