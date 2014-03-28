@@ -197,7 +197,7 @@ main() {
   Future testAsyncParse(parser, Iterable<String> streamParts) =>
       parser.parseAsync(generateStream(streamParts), convertUtf16)
         .then((final AsyncParseResult result) =>
-            print(result.left));
+            print(result));
 
   testAsyncParse(POUND_SIGN.many(), ["####555577"]);
   testAsyncParse(POUND_SIGN + string("1234"), ["#12", "3", "4"]);
@@ -213,4 +213,5 @@ main() {
   testAsyncParse(string("abc") | string("def") | string("ghi"), ["g", "h", "i"]);
   testAsyncParse((string("d") | string("a")).many(), ["adad"]);
   testAsyncParse((COMMA + DASH) ^  ALPHA, ["a"]);
+  testAsyncParse((DASH + WSP.many1()).many() + DASH, ["-"]);
 }

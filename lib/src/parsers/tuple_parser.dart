@@ -36,27 +36,30 @@ class _TupleParser extends ParserBase<Tuple> implements Parser<Tuple> {
     final ReplayStream<List<int>> stream = new ReplayStream(bytes);
 
     Future retval;
-    for (final Parser p in _parsers) {
-      if (isNull(retval)) {
-        retval = p.parseAsync(stream, convert);
-      } else {
-        retval = retval.then((final AsyncParseResult result) =>
-            result.fold(
-                (final value) {
-                  tokens.add(value);
-                  return p.parseAsync(result.next, convert);
-                }, (final FormatException e) =>
-                    new AsyncParseResult.failure(stream.replay())));
-      }
-    }
+    Iterator<Parser> parserItr = _parsers.iterator;
 
-    return retval.then((final AsyncParseResult result) =>
+    Future doNextParser(final AsyncParseResult result) =>
         result.fold(
             (final value) {
               tokens.add(value);
-              stream.disableReplay();
-              return new AsyncParseResult.success(Tuple.create(tokens), result.next);
-            }, (_) => result));
+
+              if (parserItr.moveNext()) {
+                return parserItr.current.parseAsync(result.next, convert).then(doNextParser);
+              } else {
+                stream.disableReplay();
+                return new AsyncParseResult.success(Tuple.create(tokens), result.next);
+              }
+            }, (final FormatException e) {
+              return new AsyncParseResult.failure(stream.replay());
+            });
+
+    if (parserItr.moveNext()) {
+      retval = parserItr.current.parseAsync(stream, convert).then(doNextParser);
+    } else {
+      retval = new Future.error("No parsers");
+    }
+
+    return retval;
   }
 
   String toString() =>
