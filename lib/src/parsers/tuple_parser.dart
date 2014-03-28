@@ -35,10 +35,10 @@ class _TupleParser extends ParserBase<Tuple> implements Parser<Tuple> {
     final MutableSequence tokens = new GrowableSequence();
     final ReplayStream<List<int>> stream = new ReplayStream(bytes);
 
-    Future retval;
+    Future<AsyncParseResult<Tuple>> retval;
     Iterator<Parser> parserItr = _parsers.iterator;
 
-    Future doNextParser(final AsyncParseResult result) =>
+    Future<AsyncParseResult<Tuple>> doNextParser(final AsyncParseResult result) =>
         result.fold(
             (final value) {
               tokens.add(value);
@@ -47,10 +47,10 @@ class _TupleParser extends ParserBase<Tuple> implements Parser<Tuple> {
                 return parserItr.current.parseAsync(result.next, convert).then(doNextParser);
               } else {
                 stream.disableReplay();
-                return new AsyncParseResult.success(Tuple.create(tokens), result.next);
+                return new Future.value(new AsyncParseResult.success(Tuple.create(tokens), result.next));
               }
             }, (final FormatException e) {
-              return new AsyncParseResult.failure(stream.replay());
+              return new Future.value(new AsyncParseResult.failure(stream.replay()));
             });
 
     if (parserItr.moveNext()) {
