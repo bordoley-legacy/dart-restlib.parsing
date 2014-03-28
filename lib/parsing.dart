@@ -38,7 +38,6 @@ part "src/abstract_rune_matcher.dart";
 part "src/iterable_string.dart";
 part "src/parser.dart";
 part "src/parser_base.dart";
-part "src/replay_stream.dart";
 part "src/rune_matcher.dart";
 
 
