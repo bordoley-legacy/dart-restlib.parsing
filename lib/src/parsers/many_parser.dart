@@ -2,8 +2,12 @@ part of parsing;
 
 class _ManyParser<T> extends ParserBase<Iterable<T>> {
   final Parser<T> parser;
+  final String name;
 
-  const _ManyParser(this.parser);
+  const _ManyParser(this.parser, [this.name]);
+
+  Parser<Iterable<T>> named(final String name) =>
+      new _ManyParser(this.parser, checkNotNull(name));
 
   ParseResult<Iterable<T>> parseFrom(final IterableString str) {
     ImmutableSequence<T> retval = EMPTY_SEQUENCE;
@@ -30,5 +34,5 @@ class _ManyParser<T> extends ParserBase<Iterable<T>> {
       doParseAsync(bytes, convert, EMPTY_SEQUENCE);
 
   String toString() =>
-      "($parser)*";
+      firstNotNull(name, "($parser)*");
 }

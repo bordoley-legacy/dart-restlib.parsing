@@ -2,8 +2,12 @@ part of parsing;
 
 class _ManyRuneParser extends ParserBase<IterableString> {
   final RuneMatcher matcher;
+  final String name;
 
-  const _ManyRuneParser(this.matcher);
+  const _ManyRuneParser(this.matcher, [this.name]);
+
+  Parser<IterableString> named(final String name) =>
+      new _ManyRuneParser(this.matcher, checkNotNull(name));
 
   ParseResult<IterableString> parseFrom(final IterableString str) {
     final CodePointIterator itr = str.iterator;
@@ -14,5 +18,5 @@ class _ManyRuneParser extends ParserBase<IterableString> {
   }
 
   String toString() =>
-      "($matcher)*";
+      firstNotNull(name, "($matcher)*");
 }

@@ -1,8 +1,6 @@
 part of parsing;
 
 class _TupleParser extends ParserBase<Tuple> implements Parser<Tuple> {
-  final ImmutableSequence<Parser> _parsers;
-
   factory _TupleParser(final Parser fst, final Parser snd) {
     ImmutableSequence<Parser> parsers =
         (fst is _TupleParser) ? fst._parsers : EMPTY_SEQUENCE.add(fst);
@@ -11,7 +9,13 @@ class _TupleParser extends ParserBase<Tuple> implements Parser<Tuple> {
     return new _TupleParser._(parsers);
   }
 
-  const _TupleParser._(this._parsers);
+  final ImmutableSequence<Parser> _parsers;
+  final String name;
+
+  const _TupleParser._(this._parsers, [this.name]);
+
+  Parser<Tuple> named(final String name) =>
+      new _TupleParser._(this._parsers, checkNotNull(name));
 
   ParseResult<Tuple> parseFrom(final IterableString str) {
     final MutableSequence tokens = new GrowableSequence();
@@ -63,5 +67,5 @@ class _TupleParser extends ParserBase<Tuple> implements Parser<Tuple> {
   }
 
   String toString() =>
-      "(" + _parsers.join(" + ") + ")";
+      firstNotNull(name, "(" + _parsers.join(" + ") + ")");
 }

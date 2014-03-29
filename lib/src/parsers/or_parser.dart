@@ -2,8 +2,12 @@ part of parsing;
 
 class _OrParser<T> extends ParserBase<T> {
   final Iterable<Parser<T>> parsers;
+  final String name;
 
-  const _OrParser(this.parsers);
+  const _OrParser(this.parsers, [this.name]);
+
+  Parser<T> named(final String name) =>
+      new _OrParser(parsers, checkNotNull(name));
 
   ParseResult<T> parseFrom(final IterableString str) {
     bool eof = false;
@@ -36,4 +40,7 @@ class _OrParser<T> extends ParserBase<T> {
     }
     return retval;
   }
+
+  String toString() =>
+      firstNotNull(name, parsers.join("|"));
 }

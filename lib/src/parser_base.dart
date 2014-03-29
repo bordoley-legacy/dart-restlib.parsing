@@ -28,6 +28,9 @@ abstract class ParserBase<T> implements Parser<T> {
   Parser map(dynamic f(T value)) =>
       new _MappedParser(this, f);
 
+  Parser<T> named(final String name) =>
+      new _NamedParser(this, name);
+
   Parser<Option<T>> optional() =>
       new _OptionalParser(this);
 

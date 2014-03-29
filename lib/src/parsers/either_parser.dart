@@ -3,8 +3,12 @@ part of parsing;
 class _EitherParser<T1, T2> extends ParserBase<Either<T1, T2>> {
   final Parser<T1> fst;
   final Parser<T2> snd;
+  final String name;
 
-  const _EitherParser(this.fst, this.snd);
+  const _EitherParser(this.fst, this.snd, [this.name]);
+
+  Parser<Either<T1, T2>> named(final String name) =>
+      new _EitherParser(this.fst, this.snd, checkNotNull(name));
 
   ParseResult<Either<T1, T2>> parseFrom(final IterableString str) {
     final ParseResult<T1> fstResult = fst.parseFrom(str);
@@ -33,5 +37,5 @@ class _EitherParser<T1, T2> extends ParserBase<Either<T1, T2>> {
                             (_) => result2))));
 
   String toString() =>
-      "($fst | $snd)";
+      firstNotNull(name, "($fst | $snd)");
 }

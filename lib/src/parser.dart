@@ -19,6 +19,8 @@ abstract class Parser<T> {
 
   Parser map(dynamic f(T value));
 
+  Parser<T> named(final String name);
+
   Parser<Option<T>> optional();
 
   Parser<T> orElse(T alternative);

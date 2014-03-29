@@ -6,10 +6,13 @@ typedef Option _FlatMapFunc(dynamic e);
 class _MappedParser<T> extends ParserBase<T> {
   final Parser<T> delegate;
   final _MapFunc f;
+  final String name;
 
-  _MappedParser(delegate, f(T t)):
-    this.delegate = delegate,
+  const _MappedParser(this.delegate, f(T t), [this.name]):
     this.f = f;
+
+  Parser<T> named(final String name) =>
+      new _MappedParser(this.delegate, this.f, checkNotNull(name));
 
   ParseResult<T> parseFrom(final IterableString str) {
     final ParseResult delegateResult = delegate.parseFrom(str);
@@ -39,16 +42,19 @@ class _MappedParser<T> extends ParserBase<T> {
   }
 
   String toString() =>
-      "Mapped($delegate)";
+      firstNotNull(name, "Mapped($delegate)");
 }
 
 class _FlatMappedParser<T> extends ParserBase<T> {
   final Parser<T> delegate;
   final _FlatMapFunc f;
+  final String name;
 
-  _FlatMappedParser(delegate, Option f(T t)):
-    this.delegate = delegate,
+  _FlatMappedParser(this.delegate, Option f(T t), [this.name]):
     this.f = f;
+
+  Parser<T> named(final String name) =>
+      new _FlatMappedParser(this.delegate, this.f, checkNotNull(name));
 
   ParseResult<T> parseFrom(final IterableString str) {
     final ParseResult delegateResult = delegate.parseFrom(str);
@@ -78,5 +84,5 @@ class _FlatMappedParser<T> extends ParserBase<T> {
   }
 
   String toString() =>
-      "FlatMapped($delegate)";
+      firstNotNull(name, "FlatMapped($delegate)");
 }

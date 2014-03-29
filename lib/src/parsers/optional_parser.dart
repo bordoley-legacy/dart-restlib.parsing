@@ -2,8 +2,12 @@ part of parsing;
 
 class _OptionalParser<T> extends ParserBase<Option<T>> {
   final Parser<T> delegate;
+  final String name;
 
-  const _OptionalParser(this.delegate);
+  const _OptionalParser(this.delegate, [this.name]);
+
+  Parser<Option<T>> named(final String name) =>
+      new _OptionalParser(this.delegate, checkNotNull(name));
 
   ParseResult<Option<T>> parseFrom(final IterableString str) {
     final ParseResult<T> result = delegate.parseFrom(str);
@@ -20,5 +24,5 @@ class _OptionalParser<T> extends ParserBase<Option<T>> {
                 new AsyncParseResult.success(Option.NONE, result.next));
 
   String toString() =>
-      "Optional($delegate)";
+      firstNotNull(name, "Optional($delegate)");
 }

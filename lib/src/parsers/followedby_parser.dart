@@ -3,8 +3,12 @@ part of parsing;
 class _FollowedByParser<T> extends ParserBase<T> {
   final Parser<T> parser;
   final Parser next;
+  final String name;
 
-  const _FollowedByParser(this.parser, this.next);
+  const _FollowedByParser(this.parser, this.next, [this.name]);
+
+  Parser<T> named(final String name) =>
+      new _FollowedByParser(this.parser, this.next, checkNotNull(name));
 
   ParseResult parseFrom(final IterableString str) {
     final ParseResult<T> parseResult = parser.parseFrom(str);
@@ -40,5 +44,5 @@ class _FollowedByParser<T> extends ParserBase<T> {
   }
 
   String toString() =>
-      "$parser.followedBy($next)";
+      firstNotNull(name, "$parser.followedBy($next)");
 }

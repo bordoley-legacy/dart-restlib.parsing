@@ -2,8 +2,12 @@ part of parsing;
 
 class _StringParser extends ParserBase<String> {
   final String retval;
+  final String name;
 
-  const _StringParser(this.retval);
+  const _StringParser(this.retval, [this.name]);
+
+  Parser<String> named(final String name) =>
+      new _StringParser(this.retval, name);
 
   ParseResult<String> parseFrom(final IterableString str) {
     final CodePointIterator ref = new IterableString(retval).iterator;
@@ -23,5 +27,5 @@ class _StringParser extends ParserBase<String> {
   }
 
   String toString() =>
-      "${retval}";
+      firstNotNull(name, "${retval}");
 }

@@ -2,9 +2,13 @@ part of parsing;
 
 class _RecurseParser<T> extends ParserBase<T> {
   final Function delegate;
+  final String name;
 
-  _RecurseParser(Parser<T> delegate()) :
+  _RecurseParser(Parser<T> delegate(), [this.name]) :
     this.delegate = delegate;
+
+  Parser<T> named(final String name) =>
+      new _RecurseParser(delegate, checkNotNull(name));
 
   ParseResult<T> parseFrom(final IterableString str) =>
       delegate().parseFrom(str);
@@ -13,5 +17,5 @@ class _RecurseParser<T> extends ParserBase<T> {
       delegate().parseAsync(bytes, convert);
 
   String toString() =>
-      "rec(${delegate()})";
+      firstNotNull(name, "rec(${delegate()})");
 }
