@@ -54,7 +54,7 @@ abstract class ParserBase<T> implements Parser<T> {
         (final List<int> data) =>
             controller
               .map((final StreamController next) =>
-                  next.add(data))
+                  next..add(data))
               .orCompute(() {
                 final ParseResult<T> result = parseFrom(convert(concatLists(stream.values)));
                 result.fold(

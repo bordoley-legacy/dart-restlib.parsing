@@ -186,7 +186,7 @@ parsingTestGroups() {
 }
 
 main() {
-  parsingTestGroups();
+  //parsingTestGroups();
 
   Stream<List<int>> generateStream(final Iterable<String> streamParts) =>
       new Stream.fromIterable(streamParts.map((final String str) => str.codeUnits));
@@ -199,19 +199,19 @@ main() {
         .then((final AsyncParseResult result) =>
             print(result));
 
-  //testAsyncParse(POUND_SIGN.many(), ["####555577"]);
+  testAsyncParse(POUND_SIGN.many(), ["####555577"]);
   testAsyncParse(POUND_SIGN + string("1234"), ["#12", "3", "4"]);
-  //testAsyncParse(string("ab") ^ isChar("c"), ["fgh"]);
-  //testAsyncParse(EOF, ["", ""]);
-  //testAsyncParse(string("abc") + EOF, ["", "abc"]);
-  //testAsyncParse(string("abc").many(), ["abc", "abc   "]);
-  //testAsyncParse(string("abc").map((final String str) => "def").many(),["abc", "abc   "]);
-  //testAsyncParse(string("abc").flatMap((final String str) => new Option("def")).many(), ["abc", "abc   "]);
-  //testAsyncParse(string("abc").optional(), ["abc", "abc   "]);
-  //testAsyncParse(string("abc").optional(), ["   ", "jklj   "]);
-  //testAsyncParse(string("abc") | string("def") | string("ghi"), ["a", "b", "c"]);
-  //testAsyncParse(string("abc") | string("def") | string("ghi"), ["g", "h", "i"]);
-  //testAsyncParse((string("d") | string("a")).many(), ["adad"]);
-  //testAsyncParse((COMMA + DASH) ^  ALPHA, ["a"]);
-  //testAsyncParse((DASH + WSP.many1()).many() + DASH, ["-"]);
+  testAsyncParse(string("ab") ^ isChar("c"), ["fgh"]);
+  testAsyncParse(EOF, ["", ""]);
+  testAsyncParse(string("abc") + EOF, ["", "abc"]);
+  testAsyncParse(string("abc").many(), ["abc", "abc   "]);
+  testAsyncParse(string("abc").map((final String str) => "def").many(),["abc", "abc   "]);
+  testAsyncParse(string("abc").flatMap((final String str) => new Option("def")).many(), ["abc", "abc   "]);
+  testAsyncParse(string("abc").optional(), ["abc", "abc   "]);
+  testAsyncParse(string("abc").optional(), ["   ", "jklj   "]);
+  testAsyncParse(string("abc") | string("def") | string("ghi"), ["a", "b", "c"]);
+  testAsyncParse(string("abc") | string("def") | string("ghi"), ["g", "h", "i"]);
+  testAsyncParse((string("d") | string("a")).many(), ["adad"]);
+  testAsyncParse((COMMA + DASH) ^  ALPHA, ["a"]);
+  testAsyncParse((DASH + WSP.many1()).many() + DASH, ["- - - ","- - - ","- - - -"]);
 }
