@@ -83,7 +83,11 @@ const RuneMatcher DQUOTE = const _SingleRuneMatcher(34, "DQUOTE");
 
 const RuneMatcher FORWARD_SLASH = const _SingleRuneMatcher(47);
 
-const RuneMatcher HEXDIG = const _OrRuneMatcher(const[NUMERIC, const _InRangeRuneMatcher(65, 70)], "HEXDIG");
+
+// HEXDIG as defined in HTTP. Major difference from standard ABNF is that alpha characters are case insensitive
+const RuneMatcher HEXDIG =
+  const _OrRuneMatcher(
+      const[NUMERIC, const _InRangeRuneMatcher(65, 70), const _InRangeRuneMatcher(97, 102)], "HEXDIG");
 
 const RuneMatcher HTAB = const _SingleRuneMatcher(9, "HTAB");
 
